@@ -6,6 +6,10 @@ android {
     namespace = "algonquin.cst2335.groupappilcation"
     compileSdk = 34
 
+    buildFeatures{
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId = "algonquin.cst2335.groupappilcation"
         minSdk = 24

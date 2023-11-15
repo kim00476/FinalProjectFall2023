@@ -10,21 +10,27 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GroupAppilcation"
         tools:targetApi="31">
-
-
+        <activity
+            android:name=".SongSearchMain"
+            android:exported="false" />
+        <activity
+            android:name=".RecipeSearchMain"
+            android:exported="false" />
+        <activity
+            android:name=".SunsetSunriseMain"
+            android:exported="false" />
+        <activity
+            android:name=".DictionaryMain"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="DictionaryAPI_class"/>
-
     </application>
 
 </manifest>
