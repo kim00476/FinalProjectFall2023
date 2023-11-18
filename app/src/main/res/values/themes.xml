@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.GroupAppilcation" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.GroupApplication" parent="Theme.Material3.DayNight.NoActionBar">
 
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -9,5 +9,5 @@
 
 
 
-    <style name="Theme.GroupAppilcation" parent="Base.Theme.GroupAppilcation" />
+    <style name="Theme.GroupApplication" parent="Base.Theme.GroupApplication" />
 </resources>
