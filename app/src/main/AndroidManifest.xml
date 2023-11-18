@@ -6,9 +6,10 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
+        android:icon="@drawable/app_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.GroupAppilcation"
+        android:theme="@style/Theme.GroupApplication"
         tools:targetApi="31">
         <activity
             android:name=".SongSearchMain"
