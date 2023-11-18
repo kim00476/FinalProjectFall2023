@@ -2,8 +2,11 @@ package algonquin.cst2335.groupappilcation;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
+import android.widget.EditText;
 
 import algonquin.cst2335.groupappilcation.databinding.ActivityDictionaryMainBinding;
 
@@ -11,6 +14,7 @@ import algonquin.cst2335.groupappilcation.databinding.ActivityDictionaryMainBind
 public class DictionaryMain extends AppCompatActivity {
 
 ActivityDictionaryMainBinding binding;
+SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +24,18 @@ ActivityDictionaryMainBinding binding;
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.dictionaryToolbar);
+
+        SharedPreferences prefs = getSharedPreferences("MyDictionaryData", Context.MODE_PRIVATE);
+        String wordFormSearch = prefs.getString("WordSearched", "");
+        binding.dictionarySearch.setText(wordFormSearch);
+
+        binding.button.setOnClickListener(click -> {
+            SharedPreferences.Editor editor = prefs.edit();
+            EditText word = findViewById(R.id.dictionarySearch);
+            String wordSearched = word.getText().toString();
+            editor.putString("WordSearched", wordSearched);
+            editor.apply();
+        });
 
         }
 
@@ -31,4 +47,6 @@ ActivityDictionaryMainBinding binding;
 
             return true;
     }
+
+
 }
