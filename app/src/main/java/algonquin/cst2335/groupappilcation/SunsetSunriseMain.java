@@ -10,5 +10,6 @@ public class SunsetSunriseMain extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sunset_sunrise_main);
+
     }
 }
