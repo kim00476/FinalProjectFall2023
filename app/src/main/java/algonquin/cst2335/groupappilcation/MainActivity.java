@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         binding.dictionaryButton.setOnClickListener( click -> {
 
             startActivity(new Intent(this, DictionaryMain.class));
-            Toast.makeText(this, "Click this button", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Moving to the Dictionary", Toast.LENGTH_LONG).show();
 
             Snackbar.make(binding.dictionaryButton, "Dictonary Time!", Snackbar.LENGTH_LONG).show();
         });
