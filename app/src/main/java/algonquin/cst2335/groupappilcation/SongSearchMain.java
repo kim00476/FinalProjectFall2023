@@ -4,11 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import algonquin.cst2335.groupappilcation.databinding.ActivityDictionaryMainBinding;
+import algonquin.cst2335.groupappilcation.databinding.ActivitySongSearchMainBinding;
+
 public class SongSearchMain extends AppCompatActivity {
+    ActivitySongSearchMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_song_search_main);
+
+        binding = ActivitySongSearchMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
     }
 }
