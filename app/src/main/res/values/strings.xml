@@ -3,4 +3,6 @@
     <string name="recipe_edit_text_hint">Search recipe by name</string>
     <string name="search_button_text">Search</string>
     <string name="view_saved_recipes_button">View Saved Recipes</string>
+    <string name="recipe_image_desc">Recipe Image</string>
+    <string name="recipe_title_placeholder">Recipe Title Goes Here</string>
 </resources>

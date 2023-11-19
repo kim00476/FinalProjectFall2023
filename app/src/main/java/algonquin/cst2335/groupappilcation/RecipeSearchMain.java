@@ -4,11 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class RecipeSearchMain extends AppCompatActivity {
+import algonquin.cst2335.groupappilcation.databinding.ActivityRecipeSearchMainBinding;
 
+public class RecipeSearchMain extends AppCompatActivity {
+    ActivityRecipeSearchMainBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recipe_search_main);
+
+        binding = ActivityRecipeSearchMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
     }
 }
