@@ -16,4 +16,12 @@
         android:id="@+id/About"
         android:title="About"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/backToHome"
+        android:icon="@android:drawable/ic_menu_revert"
+        android:title="Home"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/Instructions"
+        android:title="Help" />
 </menu>
