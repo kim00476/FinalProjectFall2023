@@ -8,7 +8,11 @@ import android.view.Menu;
 import algonquin.cst2335.groupappilcation.databinding.ActivityDictionaryMainBinding;
 import algonquin.cst2335.groupappilcation.databinding.ActivitySongSearchMainBinding;
 
+import algonquin.cst2335.groupappilcation.databinding.ActivityDictionaryMainBinding;
+import algonquin.cst2335.groupappilcation.databinding.ActivitySongSearchMainBinding;
+
 public class SongSearchMain extends AppCompatActivity {
+    ActivitySongSearchMainBinding binding;
 
     ActivitySongSearchMainBinding binding;
 
@@ -18,6 +22,7 @@ public class SongSearchMain extends AppCompatActivity {
 
         binding = ActivitySongSearchMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
 
         setSupportActionBar(binding.SongToolbar);
     }
@@ -29,5 +34,6 @@ public class SongSearchMain extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.song_menu, menu);
 
         return true;
+
     }
 }//last
