@@ -12,6 +12,9 @@
         android:theme="@style/Theme.GroupApplication"
         tools:targetApi="31">
         <activity
+            android:name=".SongChatRoom"
+            android:exported="false" />
+        <activity
             android:name=".SongSearchMain"
             android:exported="false" />
         <activity
