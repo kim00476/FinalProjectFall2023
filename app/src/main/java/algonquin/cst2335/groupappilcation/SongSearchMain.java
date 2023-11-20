@@ -14,7 +14,7 @@ import algonquin.cst2335.groupappilcation.databinding.ActivitySongSearchMainBind
 public class SongSearchMain extends AppCompatActivity {
     ActivitySongSearchMainBinding binding;
 
-    ActivitySongSearchMainBinding binding;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

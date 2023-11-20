@@ -153,8 +153,21 @@ public class DictionaryMain extends AppCompatActivity {
                 return true;
 
             case R.id.backToHome:
-                showConfirmationDialog();
+                showHomeConfirmationDialog();
                 return true;
+
+            case R.id.btnRecipe:
+                showRecipeConfirmationDialog();
+                return true;
+
+            case R.id.btnSong:
+                showSongConfirmationDialog();
+                return true;
+
+            case R.id.btnSunset:
+                showSunsetConfirmationDialog();
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -185,7 +198,7 @@ public class DictionaryMain extends AppCompatActivity {
         snackbar.show();
     }
 
-    private void showConfirmationDialog() {
+    private void showHomeConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Are you sure you want to leave this page?")
                 .setTitle("Confirmation")
@@ -195,6 +208,51 @@ public class DictionaryMain extends AppCompatActivity {
                 .setPositiveButton("Yes", (dialog, cl) -> {
                     // User confirmed, navigate back to MainActivity
                     Intent intent = new Intent(this, MainActivity.class);
+                    startActivity(intent);
+                })
+                .create().show();
+    }
+
+    private void showRecipeConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to move to the Recipe Search page?")
+                .setTitle("Confirmation")
+                .setNegativeButton("Cancel", (dialog, cl) -> {
+                    // User canceled, do nothing
+                })
+                .setPositiveButton("Yes", (dialog, cl) -> {
+                    // User confirmed, navigate back to MainActivity
+                    Intent intent = new Intent(this, RecipeSearchMain.class);
+                    startActivity(intent);
+                })
+                .create().show();
+    }
+
+    private void showSongConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to move to the Song Search page?")
+                .setTitle("Confirmation")
+                .setNegativeButton("Cancel", (dialog, cl) -> {
+                    // User canceled, do nothing
+                })
+                .setPositiveButton("Yes", (dialog, cl) -> {
+                    // User confirmed, navigate back to MainActivity
+                    Intent intent = new Intent(this, SongSearchMain.class);
+                    startActivity(intent);
+                })
+                .create().show();
+    }
+
+    private void showSunsetConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to move to the Sunset & Sunrise lookup page?")
+                .setTitle("Confirmation")
+                .setNegativeButton("Cancel", (dialog, cl) -> {
+                    // User canceled, do nothing
+                })
+                .setPositiveButton("Yes", (dialog, cl) -> {
+                    // User confirmed, navigate back to MainActivity
+                    Intent intent = new Intent(this, SunsetSunriseMain.class);
                     startActivity(intent);
                 })
                 .create().show();
