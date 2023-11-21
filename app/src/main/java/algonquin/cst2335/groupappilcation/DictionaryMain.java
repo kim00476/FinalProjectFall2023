@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.snackbar.Snackbar;
@@ -88,32 +89,27 @@ public class DictionaryMain extends AppCompatActivity {
                 throw new RuntimeException(e);
             }
 
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, stringUrl, null,
+            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, stringUrl, null,
                     (response) -> {
                         try {
 
-                            Log.d("dictionaryMain", "Response: " + response.toString());
+                            JSONObject results = response.getJSONObject(0);
+                            JSONArray meanings = results.getJSONArray("meanings");
 
-                            JSONArray meaningsArray = response.getJSONArray("meanings");
+                                for (int i = 0; i < meanings.length(); i++) {
+                                    JSONObject aMeaning = meanings.getJSONObject(i);
+                                    JSONArray aDefinition = aMeaning.getJSONObject();
+                                    String definition = aMeaning.getString("definitions");
 
-                            for (int i = 0; i < meaningsArray.length(); i++) {
-                                JSONObject meaningsObject = meaningsArray.getJSONObject(i);
-
-                                JSONArray definitionsArray = meaningsObject.getJSONArray("definitions");
-
-                                for (int j = 0; j < definitionsArray.length(); j++) {
-                                    JSONObject definitionObject = definitionsArray.getJSONObject(j);
-
-                                    // Get the definition
-                                    String definition = definitionObject.getString("definition");
+                                    for (int j = 0; j < definition.length(); j++){
+                                        String def = definition.getJSONObject(j).getString;
+                                    }
 
                                     // Add the word and definition to the adapter
                                     adapter.addData(new DictionaryItem(wordSearched, definition));
                                 }
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            } catch (JSONException e) {
+                            throw new RuntimeException(e);
                         }
                     },
                     (error) -> {
