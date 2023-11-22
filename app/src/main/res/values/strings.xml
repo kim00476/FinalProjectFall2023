@@ -5,4 +5,9 @@
     <string name="view_saved_recipes_button">View Saved Recipes</string>
     <string name="recipe_image_desc">Recipe Image</string>
     <string name="recipe_title_placeholder">Recipe Title Goes Here</string>
+    <string name="first_instruction_text">Welcome to the Dictionary Search page!
+    Here you can type in any word and browse through multiple definitions.</string>
+    <string name="second_instruction_text">After you have searched the word you are thinking about, you can save the word into a list right here!</string>
+    <string name="third_instruction_text">Just click on the definition you want and use the toolbar icons to save or delete the defintion from your own list</string>
+    <string name="fourth_instruction_text">Thanks for checking out our Dictionary App!</string>
 </resources>
