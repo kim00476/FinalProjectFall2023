@@ -8,11 +8,9 @@ import android.view.Menu;
 import algonquin.cst2335.groupappilcation.databinding.ActivityDictionaryMainBinding;
 import algonquin.cst2335.groupappilcation.databinding.ActivitySongSearchMainBinding;
 
-import algonquin.cst2335.groupappilcation.databinding.ActivityDictionaryMainBinding;
-import algonquin.cst2335.groupappilcation.databinding.ActivitySongSearchMainBinding;
-
 public class SongSearchMain extends AppCompatActivity {
     ActivitySongSearchMainBinding binding;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +18,7 @@ public class SongSearchMain extends AppCompatActivity {
 
         binding = ActivitySongSearchMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
 
         setSupportActionBar(binding.SongToolbar);
     }
