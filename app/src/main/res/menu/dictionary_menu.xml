@@ -5,15 +5,36 @@
     <item
         android:id="@+id/delete_icon"
         android:icon="@android:drawable/ic_delete"
-        android:title="Delete this item"
-        app:showAsAction="always" />
+        android:title="Delete this item" />
     <item
         android:id="@+id/Search_icon"
         android:icon="@android:drawable/ic_menu_search"
-        android:title="Search "
-        app:showAsAction="always" />
+        android:title="Search " />
     <item
         android:id="@+id/About"
         android:title="About"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/backToHome"
+        android:icon="@drawable/home_icon"
+        android:title="Home"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/Instructions"
+        android:title="Help" />
+    <item
+        android:id="@+id/btnSong"
+        android:icon="@drawable/song_icon"
+        android:title="SongPage"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/btnRecipe"
+        android:icon="@drawable/recipe_icon"
+        android:title="RecipePage"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/btnSunset"
+        android:icon="@drawable/sunset2_icon"
+        android:title="SunsetPage"
+        app:showAsAction="always" />
 </menu>

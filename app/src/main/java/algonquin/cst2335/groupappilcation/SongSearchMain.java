@@ -8,9 +8,6 @@ import android.view.Menu;
 import algonquin.cst2335.groupappilcation.databinding.ActivityDictionaryMainBinding;
 import algonquin.cst2335.groupappilcation.databinding.ActivitySongSearchMainBinding;
 
-import algonquin.cst2335.groupappilcation.databinding.ActivityDictionaryMainBinding;
-import algonquin.cst2335.groupappilcation.databinding.ActivitySongSearchMainBinding;
-
 public class SongSearchMain extends AppCompatActivity {
     ActivitySongSearchMainBinding binding;
 
