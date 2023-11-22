@@ -8,17 +8,23 @@ import android.view.Menu;
 import algonquin.cst2335.groupappilcation.databinding.ActivityDictionaryMainBinding;
 import algonquin.cst2335.groupappilcation.databinding.ActivitySongSearchMainBinding;
 
+import algonquin.cst2335.groupappilcation.databinding.ActivityDictionaryMainBinding;
+import algonquin.cst2335.groupappilcation.databinding.ActivitySongSearchMainBinding;
+
 public class SongSearchMain extends AppCompatActivity {
     ActivitySongSearchMainBinding binding;
 
+<<<<<<<<< Temporary merge branch 1
 
+
+=========
+>>>>>>>>> Temporary merge branch 2
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         binding = ActivitySongSearchMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
 
         setSupportActionBar(binding.SongToolbar);
     }
