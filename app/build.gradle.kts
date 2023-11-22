@@ -13,6 +13,7 @@ android {
     defaultConfig {
         applicationId = "algonquin.cst2335.groupappilcation"
         minSdk = 24
+        //noinspection OldTargetApi
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -33,7 +34,6 @@ android {
 }
 
 dependencies {
-
     implementation ("com.android.volley:volley:1.2.1")
     val room_version = "2.6.0"
     implementation ("androidx.room:room-runtime:$room_version")
