@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,8 +27,24 @@ public class SunsetSunriseMain extends AppCompatActivity {
 
         //initialize the toolbar
         setSupportActionBar(binding.SunsetSunriseToolbar);
-    }
 
+
+        SharedPreferences prefs = getSharedPreferences("MyLocationData", Context.MODE_PRIVATE);
+        String searchedLat = prefs.getString("Latitude", "");
+        String searchedLong = prefs.getString("Longitude","");
+        binding.latitudeInput.setText(searchedLat);
+        binding.longitudeInput.setText(searchedLong);
+
+        binding.SearchButton.setOnClickListener(click -> {
+            String latitude = binding.latitudeInput.getText().toString();
+            String longitude = binding.longitudeInput.getText().toString();
+
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("Latitude", latitude);
+            editor.putString("Longitude", longitude);
+            editor.apply();
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
