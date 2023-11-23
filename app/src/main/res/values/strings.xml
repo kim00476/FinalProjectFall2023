@@ -1,4 +1,11 @@
 <resources>
+    <string name="delete">Delete</string>
+    <string name="about">About</string>
+    <string name="help">Help</string>
+    <string name="search">Search</string>
+    <string name="enterLatitude">Enter latitude:</string>
+    <string name="enterLongitude">Enter longitude:</string>
+    <string name="saveYourFavorite">Save your favorite</string>
     <string name="app_name">GroupAppilcation</string>
     <string name="recipe_edit_text_hint">Search recipe by name</string>
     <string name="search_button_text">Search</string>
@@ -8,6 +15,10 @@
     <string name="first_instruction_text">Welcome to the Dictionary Search page!
     Here you can type in any word and browse through multiple definitions.</string>
     <string name="second_instruction_text">After you have searched the word you are thinking about, you can save the word into a list right here!</string>
-    <string name="third_instruction_text">Just click on the definition you want and use the toolbar icons to save or delete the defintion from your own list</string>
+    <string name="third_instruction_text">Just click on the definition you want and use the toolbar icons to save or delete the definition from your own list</string>
     <string name="fourth_instruction_text">Thanks for checking out our Dictionary App!</string>
+    <string name="how_to_look_up_location1">This application is design for looking up sunset or sunrise time for a specific location.</string>
+    <string name="how_to_look_up_location2">Please enter the latitude and longitude in the corresponding search bar then click "search".</string>
+    <string name="how_to_look_up_location3">You can also save or delete your favorite locations by clicking the corresponding buttons at the bottom and on the top.</string>
+    <string name="how_to_look_up_location4">By tapping an existing record, you will get the current times for date of today.</string>
 </resources>
