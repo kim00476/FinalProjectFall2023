@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_toast"
+        android:title="Show Toast"/>
+
+    <item
+        android:id="@+id/action_snackbar"
+        android:title="Show Snackbar"/>
+
+    <item
+        android:id="@+id/action_alert_dialog"
+        android:title="Show Alert Dialog"/>
+
+</menu>
