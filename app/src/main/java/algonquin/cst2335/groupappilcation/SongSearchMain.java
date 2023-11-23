@@ -32,9 +32,11 @@ public class SongSearchMain extends AppCompatActivity {
         String value = sharedPreferences.getString("song", "");
         binding.editText.setText(value);
 
+        search = findViewById(R.id.editText); // main and should out of button
+
         binding.searchButton.setOnClickListener(click -> {
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            search = findViewById(R.id.editText);
+
             String searched = search.getText().toString();
             editor.putString("SongSearched", searched);
             editor.apply();
@@ -48,7 +50,7 @@ public class SongSearchMain extends AppCompatActivity {
             }
         });
 
-    }//override last
+    }//onCreate last
 
     @Override
     protected void onDestroy() {
