@@ -23,21 +23,20 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_margin="10dp"
-            android:layout_marginTop="36dp"
             android:hint="Artists Name"
             android:textSize="20dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.157"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <Button
-            android:id="@+id/Search_button"
+            android:id="@+id/searchButton"
             android:layout_width="match_parent"
             android:layout_height="51dp"
             android:text="Search"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.93"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/editText"
             app:layout_constraintTop_toBottomOf="@+id/editText" />
 
@@ -59,7 +58,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Search_button" />
+            app:layout_constraintTop_toBottomOf="@+id/searchButton" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
