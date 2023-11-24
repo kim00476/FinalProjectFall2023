@@ -104,7 +104,10 @@ public class DictionaryMain extends AppCompatActivity {
                         for (int j = 0; j < aDefinition.length(); j++){
                             String def = aDefinition.getJSONObject(j).getString("definition");
                             Log.d ("Received Definition", def);
+                            dataList.add(new DictionaryItem(wordSearched, def));
                         }
+                        adapter.notifyDataSetChanged();
+
 
                     }
 
