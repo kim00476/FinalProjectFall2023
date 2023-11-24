@@ -21,6 +21,4 @@
     <string name="how_to_look_up_location2">Please enter the latitude and longitude in the corresponding search bar then click "search".</string>
     <string name="how_to_look_up_location3">You can also save or delete your favorite locations by clicking the corresponding buttons at the bottom and on the top.</string>
     <string name="how_to_look_up_location4">By tapping an existing record, you will get the current times for date of today.</string>
-
-
 </resources>
