@@ -47,6 +47,8 @@ public class DictionaryMain extends AppCompatActivity {
     private DictionaryAdapter adapter;
 
     private List<DictionaryItem> dataList;
+    private List<String> searchHistory;
+
     ArrayList<DictionaryItem> rDef;
     DictionaryModel dictionaryModel;
     DictionaryItemDAO wDAO;
@@ -55,11 +57,12 @@ public class DictionaryMain extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        DictionaryDatabase db = Room.databaseBuilder(getApplicationContext(), DictionaryDatabase.class, "dictionary-db")
-//                .build();
-//        wDAO = db.dictionaryItemDAO();
+        DictionaryDatabase db = Room.databaseBuilder(getApplicationContext(), DictionaryDatabase.class, "dictionary-db")
+                .build();
+        wDAO = db.dictionaryItemDAO();
 
         dataList = new ArrayList<>();
+        searchHistory = new ArrayList<>();
         adapter = new DictionaryAdapter(dataList);
 
         queue = Volley.newRequestQueue(this);
@@ -105,8 +108,16 @@ public class DictionaryMain extends AppCompatActivity {
                             String def = aDefinition.getJSONObject(j).getString("definition");
                             Log.d ("Received Definition", def);
                             dataList.add(new DictionaryItem(wordSearched, def));
+                            insertDefinitionIntoDatabase(new DictionaryItem(wordSearched, def));
+
                         }
+
+                        if (!searchHistory.contains(wordSearched)) {
+                            searchHistory.add(wordSearched);
+                        }
+
                         adapter.notifyDataSetChanged();
+
 
 
                     }
@@ -126,6 +137,12 @@ public class DictionaryMain extends AppCompatActivity {
         RecyclerView recyclerView = binding.recycleView;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+    }
+
+    private void insertDefinitionIntoDatabase(DictionaryItem dictionaryItem) {
+        new Thread(() -> {
+            wDAO.insertWord(dictionaryItem);
+        }).start();
     }
 
     @Override
@@ -166,6 +183,9 @@ public class DictionaryMain extends AppCompatActivity {
             case R.id.btnSunset:
                 showSunsetConfirmationDialog();
                 return true;
+
+            case R.id.history:
+
 
         }
         return super.onOptionsItemSelected(item);

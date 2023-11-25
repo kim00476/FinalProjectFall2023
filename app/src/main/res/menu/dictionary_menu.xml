@@ -4,12 +4,14 @@
 
     <item
         android:id="@+id/delete_icon"
-        android:icon="@android:drawable/ic_delete"
-        android:title="Delete this item" />
+        android:icon="@drawable/delete"
+        android:title="Delete this item"
+        app:showAsAction="always" />
     <item
-        android:id="@+id/Search_icon"
-        android:icon="@android:drawable/ic_menu_search"
-        android:title="Search " />
+        android:id="@+id/history"
+        android:icon="@drawable/search"
+        android:title="History"
+        app:showAsAction="always" />
     <item
         android:id="@+id/About"
         android:title="About"
