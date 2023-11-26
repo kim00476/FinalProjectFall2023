@@ -13,9 +13,11 @@ public interface DictionaryItemDAO {
     @Insert
     long insertWord(DictionaryItem m);
 
-    @Query("Select * from DictionaryItem")
-    List<DictionaryItem> getAllWords();
+    @Query("Select * from DictionaryItem WHERE word = :word")
+    List<DictionaryItem> getItemByWord(String word);
 
     @Delete
     void deleteWord(DictionaryItem m);
+
+
 }

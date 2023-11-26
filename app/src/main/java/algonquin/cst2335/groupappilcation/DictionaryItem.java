@@ -12,10 +12,10 @@ public class DictionaryItem {
     public int id;
 
     @ColumnInfo(name="word")
-    private String word;
+    public String word;
 
     @ColumnInfo(name="defintion")
-    private String definition;
+    public String definition;
 
     public DictionaryItem(String word, String definition) {
         this.id = id;

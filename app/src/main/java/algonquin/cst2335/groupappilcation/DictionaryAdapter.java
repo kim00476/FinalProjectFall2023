@@ -32,6 +32,10 @@ public class DictionaryAdapter extends RecyclerView.Adapter<DictionaryAdapter.Vi
         notifyDataSetChangedOnMainThread();
     }
 
+    public interface OnItemClickListener {
+        void onDefinitionClick(int position, View view);
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
