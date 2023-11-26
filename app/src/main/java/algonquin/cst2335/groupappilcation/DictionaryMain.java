@@ -3,6 +3,10 @@ package algonquin.cst2335.groupappilcation;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
@@ -34,6 +38,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 
 import algonquin.cst2335.groupappilcation.Data.DictionaryModel;
@@ -49,7 +55,7 @@ public class DictionaryMain extends AppCompatActivity {
     private List<DictionaryItem> dataList;
     private List<String> searchHistory;
 
-    ArrayList<DictionaryItem> rDef;
+    ArrayList<DictionaryItem> dictionaryItem;
     DictionaryModel dictionaryModel;
     DictionaryItemDAO wDAO;
 
@@ -57,9 +63,21 @@ public class DictionaryMain extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        dictionaryModel = new ViewModelProvider(this).get(DictionaryModel.class);
+
         DictionaryDatabase db = Room.databaseBuilder(getApplicationContext(), DictionaryDatabase.class, "dictionary-db")
                 .build();
         wDAO = db.dictionaryItemDAO();
+
+        dictionaryModel.selectedDefinition.observe(this, (newDefinitionValue) -> {
+
+            DictionaryFragment dictionaryFragment = new DictionaryFragment(newDefinitionValue);
+            FragmentManager fMgr = getSupportFragmentManager();
+            FragmentTransaction tx = fMgr.beginTransaction();
+            tx.addToBackStack("");
+            tx.add(R.id.fragmentLocation, dictionaryFragment);
+            tx.commit();
+        });
 
         dataList = new ArrayList<>();
         searchHistory = new ArrayList<>();
@@ -68,6 +86,7 @@ public class DictionaryMain extends AppCompatActivity {
         queue = Volley.newRequestQueue(this);
 
         binding = ActivityDictionaryMainBinding.inflate(getLayoutInflater());
+
         setContentView(binding.getRoot());
 
 
@@ -76,6 +95,7 @@ public class DictionaryMain extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("MyDictionaryData", Context.MODE_PRIVATE);
         String wordFormSearch = prefs.getString("WordSearched", "");
         binding.dictionarySearch.setText(wordFormSearch);
+
 
         binding.button.setOnClickListener(click -> {
             SharedPreferences.Editor editor = prefs.edit();
@@ -132,6 +152,19 @@ public class DictionaryMain extends AppCompatActivity {
 
             // Add the request to the RequestQueue
             queue.add(request);
+
+            dictionaryItem = dictionaryModel.dictionaryItem.getValue();
+            if (dictionaryItem == null)
+                dictionaryModel.dictionaryItem.postValue( dictionaryItem = new ArrayList<DictionaryItem>());
+
+            Executor thread1 = Executors.newSingleThreadExecutor();
+            thread1.execute(() ->
+            {
+                dictionaryItem.addAll(wDAO.getItemByWord(wordSearched));
+
+                runOnUiThread(() -> binding.recycleView.setAdapter(adapter));
+            });
+
         });
 
         RecyclerView recyclerView = binding.recycleView;
