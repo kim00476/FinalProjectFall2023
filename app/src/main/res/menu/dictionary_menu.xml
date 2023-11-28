@@ -11,7 +11,16 @@
         android:id="@+id/history"
         android:icon="@drawable/search"
         android:title="History"
-        app:showAsAction="always" />
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/history_item1"
+                android:title=""
+                app:showAsAction="never"/>
+        </menu>
+    </item>
+
+
     <item
         android:id="@+id/About"
         android:title="About"

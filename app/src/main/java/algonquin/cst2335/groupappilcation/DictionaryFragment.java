@@ -23,7 +23,7 @@ public class DictionaryFragment extends Fragment {
         DictionaryDetailsLayoutBinding binding = DictionaryDetailsLayoutBinding.inflate(inflater);
 
         binding.wordText.setText(selected.word);
-        binding.databaseText.setText(selected.definition);
+        binding.definitionText.setText(selected.definition);
         binding.databaseText.setText("Id = " + selected.id);
         return binding.getRoot();
     }

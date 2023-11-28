@@ -12,14 +12,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import algonquin.cst2335.groupappilcation.Data.DictionaryModel;
+
 public class DictionaryAdapter extends RecyclerView.Adapter<DictionaryAdapter.ViewHolder> {
 
     private final List<DictionaryItem> dataList;
     private final Handler handler;
 
-    public DictionaryAdapter(List<DictionaryItem> dataList) {
+    DictionaryModel fromParentActivity;
+
+    public DictionaryAdapter(DictionaryModel dm, List<DictionaryItem> dataList) {
         this.dataList = dataList;
         this.handler = new Handler(Looper.getMainLooper());
+        fromParentActivity = dm;
     }
 
     public void addData(DictionaryItem item) {
@@ -33,7 +38,7 @@ public class DictionaryAdapter extends RecyclerView.Adapter<DictionaryAdapter.Vi
     }
 
     public interface OnItemClickListener {
-        void onDefinitionClick(int position, View view);
+        void onDefinitionClick(int position, DictionaryItem item);
     }
 
     @NonNull
@@ -59,7 +64,7 @@ public class DictionaryAdapter extends RecyclerView.Adapter<DictionaryAdapter.Vi
         handler.post(this::notifyDataSetChanged);
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         TextView wordTextView;
         TextView definitionTextView;
 
@@ -67,6 +72,14 @@ public class DictionaryAdapter extends RecyclerView.Adapter<DictionaryAdapter.Vi
             super(itemView);
             wordTextView = itemView.findViewById(R.id.wordTextView);
             definitionTextView = itemView.findViewById(R.id.definitionTextView);
+
+            itemView.setOnClickListener(view -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION ) {
+
+                    fromParentActivity.selectedDefinition.postValue(   dataList.get(position) );
+                }
+            });
         }
     }
 }
