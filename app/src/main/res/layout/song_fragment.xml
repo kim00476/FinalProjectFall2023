@@ -7,30 +7,33 @@
 
     <TextView
         android:id="@+id/titleView"
-        android:layout_width="130dp"
-        android:layout_height="27dp"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
         android:text="Title: "
-        android:textSize="17dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.654"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/addButton"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/albumImage"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/durationView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
         android:text="Duration: "
-        android:textSize="17dp"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/titleView"
         app:layout_constraintStart_toStartOf="@+id/titleView"
         app:layout_constraintTop_toBottomOf="@+id/titleView" />
 
     <TextView
         android:id="@+id/albumNameView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
         android:text="Album Name: "
-        android:textSize="17dp"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/durationView"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/durationView"
         app:layout_constraintTop_toBottomOf="@+id/durationView" />
 
@@ -38,10 +41,7 @@
         android:id="@+id/albumImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/titleView"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/addButton"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
@@ -49,8 +49,8 @@
         android:id="@+id/addButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_input_add" />
 </androidx.constraintlayout.widget.ConstraintLayout>

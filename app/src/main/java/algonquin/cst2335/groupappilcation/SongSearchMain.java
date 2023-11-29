@@ -35,6 +35,10 @@ public class SongSearchMain extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        binding = ActivitySongSearchMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
         sharedPreferences();
         buildToolbar();
         showToast();
@@ -50,8 +54,6 @@ public class SongSearchMain extends AppCompatActivity {
     }//onCreate last
 
     private void connectionDatabase() {
-        binding = ActivitySongSearchMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
 
         queue = Volley.newRequestQueue(this);
 
@@ -64,6 +66,7 @@ public class SongSearchMain extends AppCompatActivity {
     }
 
     private void buildToolbar() {
+
         setSupportActionBar(binding.SongToolbar);
     }
 
