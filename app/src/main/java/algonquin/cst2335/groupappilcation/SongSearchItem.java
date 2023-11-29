@@ -6,7 +6,8 @@ import androidx.room.PrimaryKey;
 
 @Entity
 public class SongSearchItem {
-    @PrimaryKey(autoGenerate = true)
+
+    @PrimaryKey(autoGenerate = true) //database will increment them for us
     @ColumnInfo(name="id")
     public long id;
 

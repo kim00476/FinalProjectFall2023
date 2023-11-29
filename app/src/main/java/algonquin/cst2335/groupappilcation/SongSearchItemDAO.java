@@ -14,9 +14,6 @@ public interface SongSearchItemDAO {
     @Insert
     long insertSong(SongSearchItem s);
 
-//    @Update
-//    long updateSong(SongSearchItem s);
-
     @Query("Select * from SongSearchItem WHERE name = :name")
     List<SongSearchItem> getItemByWord(String name);
 

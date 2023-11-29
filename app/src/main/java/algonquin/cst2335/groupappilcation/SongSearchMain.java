@@ -2,29 +2,58 @@ package algonquin.cst2335.groupappilcation;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.EditText;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.lang.ref.ReferenceQueue;
+import java.net.URLEncoder;
 import algonquin.cst2335.groupappilcation.databinding.ActivitySongSearchMainBinding;
 
 
 public class SongSearchMain extends AppCompatActivity {
-    ActivitySongSearchMainBinding binding;
-    EditText search;
-    SharedPreferences sharedPreferences;
+    private ActivitySongSearchMainBinding binding;
+    private EditText search;
+    private SharedPreferences sharedPreferences;
+    private SongSearchItemDAO songDao;
 
-    SongSearchItemDAO songDao;
+    private RequestQueue queue;
+
+    private String artistName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferences();
+        buildToolbar();
+        showToast();
+        showSnackBar();
+        showAlertDialog();
+        connectionDatabase();
+
+         // main and should out of button
+        binding.searchButton.setOnClickListener(click -> {
+            searchButtonClick();
+        });
+
+    }//onCreate last
+
+    private void connectionDatabase() {
+        binding = ActivitySongSearchMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        queue = Volley.newRequestQueue(this);
 
         SongDatabase database = Room.databaseBuilder(getApplicationContext(), SongDatabase.class, "Song_db")
                 .fallbackToDestructiveMigration() // Schema DB version
@@ -32,38 +61,37 @@ public class SongSearchMain extends AppCompatActivity {
                 .build();
 
         songDao = database.songDAO(); // interface
+    }
 
-
-
-        binding = ActivitySongSearchMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
+    private void buildToolbar() {
         setSupportActionBar(binding.SongToolbar);
+    }
 
+    private void sharedPreferences() {
         sharedPreferences = getSharedPreferences("SongData", Context.MODE_PRIVATE);
         String value = sharedPreferences.getString("song", "");
         binding.editText.setText(value);
+    }
 
-        search = findViewById(R.id.editText); // main and should out of button
+    private void searchButtonClick() {
+        SharedPreferences.Editor editor = getSharedPreferences("SongData", Context.MODE_PRIVATE).edit();
+        search = findViewById(R.id.editText);
+        String searched = search.getText().toString();
+        editor.putString("SongSearched", searched);
+        editor.apply();
+    }
 
-        binding.searchButton.setOnClickListener(click -> {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            String searched = search.getText().toString();
-            editor.putString("SongSearched", searched);
-            editor.apply();
+    private void showToast() {
 
-            String stringUrl = null;
-            try {
-                stringUrl = "https://api.deezer.com/search/artist/?q="
-                        + URLEncoder.encode(searched, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
-            }
+    }
 
+    private void showSnackBar() {
 
-        });
+    }
 
-    }//onCreate last
+    private void showAlertDialog() {
+
+    }
 
     @Override
     protected void onDestroy() {
@@ -81,8 +109,6 @@ public class SongSearchMain extends AppCompatActivity {
         super.onCreateOptionsMenu(menu);
 
         getMenuInflater().inflate(R.menu.song_menu, menu);
-
         return true;
-
     }
-}//last
+}//main last
