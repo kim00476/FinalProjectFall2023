@@ -1,6 +1,7 @@
 package algonquin.cst2335.groupappilcation;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -19,9 +20,20 @@ public class SongSearchMain extends AppCompatActivity {
     EditText search;
     SharedPreferences sharedPreferences;
 
+    SongSearchItemDAO songDao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SongDatabase database = Room.databaseBuilder(getApplicationContext(), SongDatabase.class, "Song_db")
+                .fallbackToDestructiveMigration() // Schema DB version
+                .allowMainThreadQueries()         // Main Thread DB : IO
+                .build();
+
+        songDao = database.songDAO(); // interface
+
+
 
         binding = ActivitySongSearchMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -36,18 +48,19 @@ public class SongSearchMain extends AppCompatActivity {
 
         binding.searchButton.setOnClickListener(click -> {
             SharedPreferences.Editor editor = sharedPreferences.edit();
-
             String searched = search.getText().toString();
             editor.putString("SongSearched", searched);
             editor.apply();
 
-            String url = null;
+            String stringUrl = null;
             try {
-                url = ""
+                stringUrl = "https://api.deezer.com/search/artist/?q="
                         + URLEncoder.encode(searched, "UTF-8");
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             }
+
+
         });
 
     }//onCreate last
