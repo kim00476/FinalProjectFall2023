@@ -217,7 +217,7 @@ public class DictionaryMain extends AppCompatActivity {
         }
         return true;
     }
-
+    int position = 0;  DictionaryFragment dictionaryFragment;
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -242,8 +242,8 @@ public class DictionaryMain extends AppCompatActivity {
                 return true;
 
             case R.id.delete_icon:
-                int position = 0;
-                DictionaryFragment dictionaryFragment = new DictionaryFragment(dataList.get(position));
+
+                 dictionaryFragment = new DictionaryFragment(dataList.get(position));
                 DictionaryItem removedItem = dictionaryModel.selectedDefinition.getValue();
                 position = dictionaryItem.indexOf(removedItem);
 
@@ -251,10 +251,30 @@ public class DictionaryMain extends AppCompatActivity {
                 if (removedItem != null && dictionaryFragment != null) {
                     builder.setMessage(getString(R.string.dict_delete_msg) + removedItem.getDefinition())
                             .setTitle(getString(R.string.dict_delete_title))
-                            .setNegativeButton(getString(R.string.dict_del_neg), (dialog, cl -> {
+                            .setNegativeButton(getString(R.string.dict_del_neg), (dialog, cl) -> {
                             })
-                            .setPositiveButton(getString(R.string.dict_del_pos), (dialog, cl -> {
-                            dictionaryItem.remove(position);   }
+                            .setPositiveButton(getString(R.string.dict_del_pos), (dialog, cl) -> {
+                            dictionaryItem.remove(position);
+                            adapter.notifyItemRemoved(position);
+
+                            Executor thread1 = Executors.newSingleThreadExecutor();
+                            thread1.execute(() ->{
+                            getSupportFragmentManager().beginTransaction().remove(dictionaryFragment).commit();
+                            wDAO.deleteWord(removedItem);
+                            dictionaryFragment = null;});
+
+                            Snackbar.make(binding.getRoot(), getString(R.string.dict_del_sb) + position, Snackbar.LENGTH_LONG)
+                                    .setAction(getString(R.string.dict_del_sb_undo), clk -> {
+                                        Executor thread2 = Executors.newSingleThreadExecutor();
+                                        thread2.execute(() -> {
+                                            int id = (int) wDAO.insertWord(removedItem);
+                                            removedItem.id = id;
+                                        });
+
+                                        dictionaryItem.add(position, removedItem);
+                                        adapter.notifyItemInserted(position);
+                                    }).show();
+                            }).create().show();
                 }
 
         }
