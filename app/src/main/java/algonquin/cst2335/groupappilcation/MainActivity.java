@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -58,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
               .setPositiveButton("Yes", (dialog, cl) -> {
                   Snackbar.make(binding.songButton, "Go to song search", Snackbar.LENGTH_LONG)
                           .setAction("go", clk -> {
-                              startActivity(new Intent(this, SongSearchMain.class));
+                              Log.d("SnackbarAction", "Snackbar Action Clicked!");
+                              startActivity(new Intent(MainActivity.this, SongSearchMain.class));
                           })
                           .show();
                     }).create().show();
