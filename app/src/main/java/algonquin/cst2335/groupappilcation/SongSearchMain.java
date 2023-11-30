@@ -3,10 +3,14 @@ package algonquin.cst2335.groupappilcation;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,6 +23,8 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.ReferenceQueue;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+
 import algonquin.cst2335.groupappilcation.databinding.ActivitySongSearchMainBinding;
 
 
@@ -31,6 +37,8 @@ public class SongSearchMain extends AppCompatActivity {
     private RequestQueue queue;
 
     private String artistName;
+
+    ArrayList<SongSearchItem> favList = new ArrayList<SongSearchItem>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,5 +121,23 @@ public class SongSearchMain extends AppCompatActivity {
 
         getMenuInflater().inflate(R.menu.song_menu, menu);
         return true;
+    }
+
+    public void addToFavorite(View view) {
+
+        String songID = view.getContentDescription().toString();
+//        Song song = songCollection.searchById(songID)
+        Toast.makeText(this, "button is clicked", Toast.LENGTH_LONG).show();
+    }
+
+    public void goToFavoriteSong(View view) {
+
+        Intent intent = new Intent(this, FavoriteSong.class);
+        startActivity(intent);
+
+//        for (int i = 0; i < SongSearchMain.favList.size(); i++)
+//        for (int i = 0; i < favList.size(); i++){
+//            Log.d("Test", favList.get(i).getTitle());
+//        }
     }
 }//main last
