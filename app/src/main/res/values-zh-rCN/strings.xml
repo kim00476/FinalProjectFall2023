@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="delete">删除</string>
+    <string name="about">关于</string>
+    <string name="help">帮助</string>
+    <string name="search">搜索</string>
+    <string name="enterLatitude">输入纬度：</string>
+    <string name="enterLongitude">输入经度：</string>
+    <string name="viewYourFavorite">查看您的收藏</string>
+    <string name="app_name">群组应用</string>
+    <string name="how_to_look_up_location1">此应用程序设计用于查找特定位置的日出或日落时间。</string>
+    <string name="how_to_look_up_location2">请输入纬度和经度，然后单击“搜索”。</string>
+    <string name="how_to_look_up_location3">您还可以通过单击底部和顶部的相应按钮保存或删除您喜欢的位置。</string>
+    <string name="how_to_look_up_location4">通过点击现有记录，您将获取今天日期的当前时间。</string>
+    <string name="imageButtonDescription">单击执行特定操作</string>
+</resources>
