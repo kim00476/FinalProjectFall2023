@@ -178,7 +178,6 @@ public class DictionaryMain extends AppCompatActivity {
 
             for (int j = 0; j < aDefinition.length(); j++) {
                 String def = aDefinition.getJSONObject(j).getString("definition");
-                Log.d("Received Definition", def);
                 DictionaryItem thisItem = new DictionaryItem(wordSearched, def);
                 dataList.add(thisItem);
 
@@ -258,7 +257,7 @@ public class DictionaryMain extends AppCompatActivity {
         textView.setText(allInstructions);
 
         Snackbar snackbar = Snackbar.make(view, "", Snackbar.LENGTH_INDEFINITE);
-        snackbar.setAction("CLOSE", v -> snackbar.dismiss());
+        snackbar.setAction(getString(R.string.dictionary_instruction_sb), v -> snackbar.dismiss());
 
         Snackbar.SnackbarLayout snackbarLayout = (Snackbar.SnackbarLayout) snackbar.getView();
         snackbarLayout.addView(customView, 0);
@@ -267,17 +266,17 @@ public class DictionaryMain extends AppCompatActivity {
     }
 
     private void showAboutToast() {
-        Toast.makeText(this, "Dictionary App made by Christopher St.Aubin", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.dictionary_about), Toast.LENGTH_SHORT).show();
     }
 
     private void showHomeConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to leave this page?")
-                .setTitle("Confirmation")
-                .setNegativeButton("Cancel", (dialog, cl) -> {
+        builder.setMessage(getString(R.string.dictionary_homebtn_alrt))
+                .setTitle(getString(R.string.dictionary_homebtn_alrt_title))
+                .setNegativeButton(getString(R.string.dictionary_homebtn_alrt_cancel), (dialog, cl) -> {
                     // User canceled, do nothing
                 })
-                .setPositiveButton("Yes", (dialog, cl) -> {
+                .setPositiveButton(getString(R.string.dictionary_homebtn_alrt_yes), (dialog, cl) -> {
                     // User confirmed, navigate back to MainActivity
                     Intent intent = new Intent(this, MainActivity.class);
                     startActivity(intent);
@@ -287,12 +286,12 @@ public class DictionaryMain extends AppCompatActivity {
 
     private void showRecipeConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to move to the Recipe Search page?")
-                .setTitle("Confirmation")
-                .setNegativeButton("Cancel", (dialog, cl) -> {
+        builder.setMessage(getString(R.string.dictionary_recpbtn_alrt))
+                .setTitle(getString(R.string.dictionary_recpbtn_alrt_title))
+                .setNegativeButton(getString(R.string.dictionary_recpbtn_alrt_cancel), (dialog, cl) -> {
                     // User canceled, do nothing
                 })
-                .setPositiveButton("Yes", (dialog, cl) -> {
+                .setPositiveButton(getString(R.string.dictionary_recpbtn_alrt_yes), (dialog, cl) -> {
                     // User confirmed, navigate to RecipeSearchMain
                     startActivity(new Intent(this, RecipeSearchMain.class));
                 })
@@ -301,12 +300,12 @@ public class DictionaryMain extends AppCompatActivity {
 
     private void showSongConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to move to the Song Search page?")
-                .setTitle("Confirmation")
-                .setNegativeButton("Cancel", (dialog, cl) -> {
+        builder.setMessage(getString(R.string.dictionary_songbtn_alrt))
+                .setTitle(getString(R.string.dictionary_songbtn_alrt_title))
+                .setNegativeButton(getString(R.string.dictionary_songbtn_alrt_cancel), (dialog, cl) -> {
                     // User canceled, do nothing
                 })
-                .setPositiveButton("Yes", (dialog, cl) -> {
+                .setPositiveButton(getString(R.string.dictionary_songbtn_alrt_yes), (dialog, cl) -> {
                     // User confirmed, navigate to SongSearchMain
                     startActivity(new Intent(this, SongSearchMain.class));
                 })
@@ -315,12 +314,12 @@ public class DictionaryMain extends AppCompatActivity {
 
     private void showSunsetConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to move to the Sunset & Sunrise lookup page?")
-                .setTitle("Confirmation")
-                .setNegativeButton("Cancel", (dialog, cl) -> {
+        builder.setMessage(getString(R.string.dictionary_sunbtn_alrt))
+                .setTitle(getString(R.string.dictionary_sunbtn_alrt_title))
+                .setNegativeButton(getString(R.string.dictionary_sunbtn_alrt_cancel), (dialog, cl) -> {
                     // User canceled, do nothing
                 })
-                .setPositiveButton("Yes", (dialog, cl) -> {
+                .setPositiveButton(getString(R.string.dictionary_sunbtn_alrt_yes), (dialog, cl) -> {
                     // User confirmed, navigate to SunsetSunriseMain
                     startActivity(new Intent(this, SunsetSunriseMain.class));
                 })
