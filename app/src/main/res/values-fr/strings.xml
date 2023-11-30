@@ -9,10 +9,10 @@
         <string name="app_name">GroupAppilcation</string>
 
         <!--    Main activity strings-->
-        <string name="main_message">Bienvenue dans notre Application!</string>
-        <string name="main_recipebtn">Recherche de Recettes</string>
-        <string name="main_dictionarybtn">Word Search</string>
-        <string name="main_songbtn">Recherche de Chansons</string>
+        <string name="main_message">Bienvenue a la Application!</string>
+        <string name="main_recipebtn">Recettes</string>
+        <string name="main_dictionarybtn">Dictionnaire</string>
+        <string name="main_songbtn">Chansons</string>
         <string name="main_sunsetbtn">Lever de Solei</string>
         <string name="main_toast_dict">Aller au Dictionnaire</string>
 
@@ -34,8 +34,7 @@
 
 
         <!--    dictionary strings -->
-        <string name="first_instruction_text">Bienvenue sur la page de recherche du dictionnaire!
-    Ici, vous pouvez saisir n'importe quel mot et parcourir plusieurs définitions.</string>
+        <string name="first_instruction_text">Bienvenue sur la page de recherche du dictionnaire! Ici, vous pouvez saisir n\'importe quel mot et parcourir plusieurs définitions.</string>
         <string name="second_instruction_text">Après avoir recherché le mot qui vous intéresse, vous pouvez enregistrer le mot dans une liste ici!</string>
         <string name="third_instruction_text">Il vous suffit de cliquer sur la définition qui vous intéresse et d\'utiliser les icônes de la barre d\'outils pour enregistrer ou supprimer la définition de votre propre liste</string>
         <string name="fourth_instruction_text">Merci d\'avoir consulté notre application de dictionnaire!</string>
