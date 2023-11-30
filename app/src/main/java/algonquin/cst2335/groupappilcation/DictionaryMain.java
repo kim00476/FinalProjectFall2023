@@ -240,6 +240,23 @@ public class DictionaryMain extends AppCompatActivity {
             case R.id.btnSunset:
                 showSunsetConfirmationDialog();
                 return true;
+
+            case R.id.delete_icon:
+                int position = 0;
+                DictionaryFragment dictionaryFragment = new DictionaryFragment(dataList.get(position));
+                DictionaryItem removedItem = dictionaryModel.selectedDefinition.getValue();
+                position = dictionaryItem.indexOf(removedItem);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(DictionaryMain.this);
+                if (removedItem != null && dictionaryFragment != null) {
+                    builder.setMessage(getString(R.string.dict_delete_msg) + removedItem.getDefinition())
+                            .setTitle(getString(R.string.dict_delete_title))
+                            .setNegativeButton(getString(R.string.dict_del_neg), (dialog, cl -> {
+                            })
+                            .setPositiveButton(getString(R.string.dict_del_pos), (dialog, cl -> {
+                            dictionaryItem.remove(position);   }
+                }
+
         }
 
         return super.onOptionsItemSelected(item);
