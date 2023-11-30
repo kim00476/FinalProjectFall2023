@@ -23,7 +23,7 @@
 
     <item
         android:id="@+id/About"
-        android:title="About"
+        android:title="@string/about"
         app:showAsAction="never" />
     <item
         android:id="@+id/backToHome"
@@ -32,7 +32,7 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/Instructions"
-        android:title="Help" />
+        android:title="@string/help" />
     <item
         android:id="@+id/btnSong"
         android:icon="@drawable/song_icon"
