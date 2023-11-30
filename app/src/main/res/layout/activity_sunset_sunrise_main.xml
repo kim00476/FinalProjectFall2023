@@ -20,29 +20,29 @@
 
 
         <EditText
-            android:inputType="numberDecimal|numberSigned"
+            android:inputType="text"
             android:id="@+id/latitudeInput"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:hint="-90 to 90"
+            android:hint="-90 ~ 90"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView1" />
 
         <EditText
-            android:inputType="numberDecimal|numberSigned"
+            android:inputType="text"
             android:id="@+id/longitudeInput"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:hint="-180 to 180"
+            android:hint="-180 ~ 180"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2"/>
 
         <Button
-            android:id="@+id/Search_button"
+            android:id="@+id/searchButton"
             android:layout_width="match_parent"
             android:layout_height="51dp"
             android:text="@string/search"
@@ -67,20 +67,21 @@
             app:layout_constraintTop_toBottomOf="@+id/latitudeInput" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/SunsetSunrise_recycleView"
+            android:id="@+id/sunsetSunriseRecycleView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Search_button" />
+            app:layout_constraintTop_toBottomOf="@+id/searchButton" />
+
 
         <Button
-            android:id="@+id/Save_button"
+            android:id="@+id/viewFavorite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/saveYourFavorite"
+            android:text="@string/viewYourFavorite"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
