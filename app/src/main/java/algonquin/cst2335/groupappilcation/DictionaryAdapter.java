@@ -76,8 +76,8 @@ public class DictionaryAdapter extends RecyclerView.Adapter<DictionaryAdapter.Vi
             itemView.setOnClickListener(view -> {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION ) {
-
-                    fromParentActivity.selectedDefinition.postValue(   dataList.get(position) );
+                    DictionaryItem location = dataList.get(position);
+                    fromParentActivity.selectedDefinition.postValue(  location );
                 }
             });
         }

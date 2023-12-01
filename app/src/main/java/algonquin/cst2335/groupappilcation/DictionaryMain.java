@@ -217,7 +217,8 @@ public class DictionaryMain extends AppCompatActivity {
         }
         return true;
     }
-    int position = 0;  DictionaryFragment dictionaryFragment;
+    int position = 0;
+    DictionaryFragment dictionaryFragment;
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -240,38 +241,38 @@ public class DictionaryMain extends AppCompatActivity {
             case R.id.btnSunset:
                 showSunsetConfirmationDialog();
                 return true;
-
             case R.id.delete_icon:
 
-                 dictionaryFragment = new DictionaryFragment(dataList.get(position));
-                DictionaryItem removedItem = dictionaryModel.selectedDefinition.getValue();
-                position = dictionaryItem.indexOf(removedItem);
+                dictionaryFragment = new DictionaryFragment(dataList.get(position));
 
+
+                DictionaryItem selectedItem = dictionaryModel.selectedDefinition.getValue();
                 AlertDialog.Builder builder = new AlertDialog.Builder(DictionaryMain.this);
-                if (removedItem != null && dictionaryFragment != null) {
-                    builder.setMessage(getString(R.string.dict_delete_msg) + removedItem.getDefinition())
+                if (selectedItem != null && dictionaryFragment != null) {
+                    builder.setMessage(getString(R.string.dict_delete_msg) + dictionaryModel.selectedDefinition.getValue().getDefinition())
                             .setTitle(getString(R.string.dict_delete_title))
                             .setNegativeButton(getString(R.string.dict_del_neg), (dialog, cl) -> {
                             })
                             .setPositiveButton(getString(R.string.dict_del_pos), (dialog, cl) -> {
-                            dictionaryItem.remove(position);
+                                Log.d("rrrrrrrrr", dataList.size() + "" + "....." + position);
+                            dictionaryItem.remove(dataList.get(position));
                             adapter.notifyItemRemoved(position);
 
                             Executor thread1 = Executors.newSingleThreadExecutor();
                             thread1.execute(() ->{
-                            getSupportFragmentManager().beginTransaction().remove(dictionaryFragment).commit();
-                            wDAO.deleteWord(removedItem);
+                            getSupportFragmentManager().popBackStack();
+                            wDAO.deleteWord(dictionaryModel.selectedDefinition.getValue());
                             dictionaryFragment = null;});
 
                             Snackbar.make(binding.getRoot(), getString(R.string.dict_del_sb) + position, Snackbar.LENGTH_LONG)
                                     .setAction(getString(R.string.dict_del_sb_undo), clk -> {
                                         Executor thread2 = Executors.newSingleThreadExecutor();
                                         thread2.execute(() -> {
-                                            int id = (int) wDAO.insertWord(removedItem);
-                                            removedItem.id = id;
+                                            int id = (int) wDAO.insertWord(dictionaryModel.selectedDefinition.getValue());
+                                            dictionaryModel.selectedDefinition.getValue().id = id;
                                         });
 
-                                        dictionaryItem.add(position, removedItem);
+                                        dictionaryItem.add(position, dictionaryModel.selectedDefinition.getValue());
                                         adapter.notifyItemInserted(position);
                                     }).show();
                             }).create().show();
