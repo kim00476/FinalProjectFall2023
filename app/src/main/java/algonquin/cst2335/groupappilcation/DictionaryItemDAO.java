@@ -7,15 +7,35 @@ import androidx.room.Query;
 
 import java.util.List;
 
+/**
+ * The Data Access Object (DAO) interface for performing database operations on DictionaryItem entities.
+ */
 @Dao
 public interface DictionaryItemDAO {
 
+    /**
+     * Inserts a new dictionary item into the database.
+     *
+     * @param m The dictionary item to be inserted.
+     * @return The ID of the inserted dictionary item.
+     */
     @Insert
     long insertWord(DictionaryItem m);
 
+    /**
+     * Retrieves a list of dictionary items based on a given word.
+     *
+     * @param word The word to search for in the database.
+     * @return A list of dictionary items matching the specified word.
+     */
     @Query("Select * from DictionaryItem WHERE word = :word")
     List<DictionaryItem> getItemByWord(String word);
 
+    /**
+     * Deletes a dictionary item from the database.
+     *
+     * @param m The dictionary item to be deleted.
+     */
     @Delete
     void deleteWord(DictionaryItem m);
 
