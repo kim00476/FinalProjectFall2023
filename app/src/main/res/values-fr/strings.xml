@@ -6,7 +6,7 @@
         <string name="about">À propos de</string>
         <string name="help">Aide</string>
         <string name="search">Recherche</string>
-        <string name="app_name">GroupAppilcation</string>
+        <string name="app_name1">GroupAppilcation</string>
 
         <!--    Main activity strings-->
         <string name="main_message">Bienvenue a la Application!</string>
