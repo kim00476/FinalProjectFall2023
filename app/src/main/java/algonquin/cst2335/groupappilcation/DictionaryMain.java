@@ -8,7 +8,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -263,25 +266,104 @@ public class DictionaryMain extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
+    /**
+     * Override method to create the options menu.
+     * Inflates the menu from the XML resource and sets up a Spinner in the Toolbar.
+     *
+     * @param menu The options menu in which items are placed.
+     * @return Returns true for the menu to be displayed; if you return false, it will not be shown.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.dictionary_menu, menu);
 
-        /** Access the submenu of the "History" item */
-        SubMenu historySubMenu = menu.findItem(R.id.history).getSubMenu();
+        /** Retrieve the Spinner from the Toolbar */
+        MenuItem spinnerItem = menu.findItem(R.id.history);
+        Spinner spinner = (Spinner) spinnerItem.getActionView();
 
-        /** Retrieve searchHistory from SharedPreferences */
-        SharedPreferences prefs = getSharedPreferences("MyDictionaryData", Context.MODE_PRIVATE);
-        String searchHistoryString = prefs.getString("SearchHistory", "");
-        List<String> searchHistory = Arrays.asList(searchHistoryString.split(","));
+        /** Perform database operation in a background thread */
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
 
-        /** Add items from searchHistory to the submenu dynamically */
-        for (int i = 0; i < searchHistory.size(); i++) {
-            historySubMenu.add(Menu.NONE, Menu.NONE, i, searchHistory.get(i));
-        }
+                /** Access the database on a background thread */
+                final List<String> words = wDAO.getAllWords();
+
+                /** Update the UI on the main thread */
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        /** Create an ArrayAdapter for the Spinner */
+                        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
+                                DictionaryMain.this, android.R.layout.simple_spinner_dropdown_item, words);
+                        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spinner.setAdapter(spinnerAdapter);
+
+                        /** Set an OnItemSelectedListener for the Spinner */
+                        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                            /**
+                             * Called when an item in the Spinner is selected.
+                             *
+                             * @param parent   The AdapterView where the selection happened.
+                             * @param view     The view within the AdapterView that was clicked.
+                             * @param position The position of the view in the adapter.
+                             * @param id       The row id of the item that is selected.
+                             */
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                String selectedWord = (String) spinner.getItemAtPosition(position);
+                                retrieveDefinitions(selectedWord);
+                            }
+
+                            /**
+                             * Called when nothing is selected in the Spinner.
+                             *
+                             * @param parent The AdapterView where nothing is selected.
+                             */
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
+                    }
+                });
+            }
+        }).start();
+
         return true;
     }
+
+    /**
+     * Retrieve definitions from the database based on the selected word and update the RecyclerView.
+     *
+     * @param selectedWord The word selected in the Spinner.
+     */
+    private void retrieveDefinitions(String selectedWord) {
+
+        /** Perform database operation in a background thread */
+    new Thread(new Runnable() {
+        @Override
+        public void run() {
+
+            /** Access the database on a background thread */
+            final List<DictionaryItem> definitions = wDAO.getItemByWord(selectedWord);
+
+            /** Update the UI on the main thread */
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    /** Update the RecyclerView with the retrieved definitions */
+                    adapter.setData(definitions);
+                }
+            });
+        }
+    }).start();
+    }
+
     int position = 0;
     DictionaryFragment dictionaryFragment;
     @Override

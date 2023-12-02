@@ -58,6 +58,11 @@ public class DictionaryAdapter extends RecyclerView.Adapter<DictionaryAdapter.Vi
         notifyDataSetChangedOnMainThread();
     }
 
+    public void setData(List<DictionaryItem> newData) {
+        dataList.clear();
+        dataList.addAll(newData);
+        notifyDataSetChanged();
+    }
 
     /**
      * Interface definition for a callback to be invoked when a dictionary item is clicked.

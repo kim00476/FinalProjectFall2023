@@ -25,11 +25,11 @@ public interface DictionaryItemDAO {
     /**
      * Retrieves a list of dictionary items based on a given word.
      *
-     * @param word The word to search for in the database.
+     * @param selectedWord The word to search for in the database.
      * @return A list of dictionary items matching the specified word.
      */
-    @Query("Select * from DictionaryItem WHERE word = :word")
-    List<DictionaryItem> getItemByWord(String word);
+    @Query("Select * from DictionaryItem WHERE word = :selectedWord")
+    List<DictionaryItem> getItemByWord(String selectedWord);
 
     /**
      * Deletes a dictionary item from the database.
@@ -38,6 +38,9 @@ public interface DictionaryItemDAO {
      */
     @Delete
     void deleteWord(DictionaryItem m);
+
+    @Query("Select distinct word from DictionaryItem")
+    List<String> getAllWords();
 
 
 }
