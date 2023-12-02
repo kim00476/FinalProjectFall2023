@@ -7,19 +7,13 @@
         android:icon="@drawable/delete"
         android:title="Delete this item"
         app:showAsAction="always" />
+
     <item
         android:id="@+id/history"
         android:icon="@drawable/search"
-        android:title="History"
-        app:showAsAction="always">
-        <menu>
-            <item
-                android:id="@+id/history_item1"
-                android:title=""
-                app:showAsAction="never"/>
-        </menu>
-    </item>
-
+        android:title=""
+        app:actionViewClass="android.widget.Spinner"
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/About"
