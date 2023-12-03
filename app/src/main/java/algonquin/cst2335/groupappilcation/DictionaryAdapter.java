@@ -53,6 +53,7 @@ public class DictionaryAdapter extends RecyclerView.Adapter<DictionaryAdapter.Vi
         DictionaryItem item = dataList.get(position);
         holder.wordTextView.setText(item.getWord());
         holder.definitionTextView.setText(item.getDefinition());
+        return null;
     }
 
     @Override

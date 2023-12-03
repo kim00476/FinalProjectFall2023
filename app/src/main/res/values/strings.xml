@@ -5,7 +5,6 @@
     <string name="search">Search</string>
     <string name="enterLatitude">Enter latitude:</string>
     <string name="enterLongitude">Enter longitude:</string>
-    <string name="saveYourFavorite">Save your favorite</string>
     <string name="app_name">GroupAppilcation</string>
     <string name="recipe_edit_text_hint">Search recipe by name</string>
     <string name="search_button_text">Search</string>
@@ -22,5 +21,11 @@
     <string name="how_to_look_up_location3">You can also save or delete your favorite locations by clicking the corresponding buttons at the bottom and on the top.</string>
     <string name="how_to_look_up_location4">By tapping an existing record, you will get the current times for date of today.</string>
     <string name="imageButtonDescription">Click to perform a specific action</string>
+    <string name="saveYourFavorite">Save your favorite</string>
+    <string name="About">About</string>
+    <string name="Help">Help</string>
+    <string name="Title">Title</string>
+    <string name="Duration">Duration</string>
+    <string name="Album">Album Name</string>
 
 </resources>

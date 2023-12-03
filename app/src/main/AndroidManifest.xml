@@ -27,6 +27,9 @@
             android:name=".DictionaryMain"
             android:exported="false" />
         <activity
+            android:name=".SongRoom"
+            android:exported="true"/>
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

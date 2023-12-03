@@ -9,6 +9,6 @@ import algonquin.cst2335.groupappilcation.DictionaryItem;
 import algonquin.cst2335.groupappilcation.SongSearchItem;
 
 public class SongSearchModel extends ViewModel {
-    public MutableLiveData<ArrayList<SongSearchItem>> searchSong = new MutableLiveData<>();
-    public MutableLiveData<SongSearchItem> selectedSong = new MutableLiveData< >();
+    public MutableLiveData<ArrayList<SongSearchItem>> songLists = new MutableLiveData<>(null);
+    public MutableLiveData<SongSearchItem> selected = new MutableLiveData< >();
 }

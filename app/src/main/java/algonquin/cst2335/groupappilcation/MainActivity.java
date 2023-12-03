@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
               .setPositiveButton("Yes", (dialog, cl) -> {
                   Snackbar.make(binding.songButton, "Go to song search", Snackbar.LENGTH_LONG)
-                          .setAction("go", clk -> {
+                          .setAction("GO", clk -> {
                               Log.d("SnackbarAction", "Snackbar Action Clicked!");
                               startActivity(new Intent(MainActivity.this, SongSearchMain.class));
                           })
