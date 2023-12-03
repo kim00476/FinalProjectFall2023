@@ -52,7 +52,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:contentDescription="@string/imageButtonDescription"
+        android:contentDescription="imageButtonDescription"
         android:onClick="addToFavorite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/albumImage"

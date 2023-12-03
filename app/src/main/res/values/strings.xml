@@ -1,31 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!--    toolbar strings -->
     <string name="delete">Delete</string>
     <string name="about">About</string>
-    <string name="help">Help</string>
-    <string name="search">Search</string>
+    <string name="help">Aide</string>
+    <string name="search">Help</string>
+    <string name="app_name1">GroupAppilcatio</string>
+
+    <!--    Main activity strings-->
+    <string name="main_message">Welcome to our app!</string>
+    <string name="main_recipebtn">Recipe Search</string>
+    <string name="main_dictionarybtn">Word Search</string>
+    <string name="main_songbtn">Song Search</string>
+    <string name="main_sunsetbtn">Sunrise Sunset</string>
+    <string name="main_toast_dict">Moving to the Dictionary</string>
+
+    <!--    sunrise sunset strings -->
     <string name="enterLatitude">Enter latitude:</string>
     <string name="enterLongitude">Enter longitude:</string>
-    <string name="app_name">GroupAppilcation</string>
+    <string name="how_to_look_up_location1">This application is design for looking up sunset or sunrise time for a specific location.</string>
+    <string name="how_to_look_up_location2">Please enter the latitude and longitude in the corresponding search bar then click "search".</string>
+    <string name="how_to_look_up_location3">You can also save or delete your favorite locations by clicking the corresponding buttons at the bottom and on the top.</string>
+    <string name="how_to_look_up_location4">By tapping an existing record, you will get the current times for date of today.</string>
+
+    <!--    recipe strings -->
+    <string name="saveYourFavorite">Save your favorite</string>
     <string name="recipe_edit_text_hint">Search recipe by name</string>
     <string name="search_button_text">Search</string>
     <string name="view_saved_recipes_button">View Saved Recipes</string>
     <string name="recipe_image_desc">Recipe Image</string>
     <string name="recipe_title_placeholder">Recipe Title Goes Here</string>
-    <string name="first_instruction_text">Welcome to the Dictionary Search page!
-    Here you can type in any word and browse through multiple definitions.</string>
-    <string name="second_instruction_text">After you have searched the word you are thinking about, you can save the word into a list right here!</string>
-    <string name="third_instruction_text">Just click on the definition you want and use the toolbar icons to save or delete the definition from your own list</string>
-    <string name="fourth_instruction_text">Thanks for checking out our Dictionary App!</string>
-    <string name="how_to_look_up_location1">This application is design for looking up sunset or sunrise time for a specific location.</string>
-    <string name="how_to_look_up_location2">Please enter the latitude and longitude in the corresponding search bar then click "search".</string>
-    <string name="how_to_look_up_location3">You can also save or delete your favorite locations by clicking the corresponding buttons at the bottom and on the top.</string>
-    <string name="how_to_look_up_location4">By tapping an existing record, you will get the current times for date of today.</string>
-    <string name="imageButtonDescription">Click to perform a specific action</string>
-    <string name="saveYourFavorite">Save your favorite</string>
+
+
+    <!--    dictionary strings -->
+    <string name="first_instruction_text">Bienvenue sur la page de recherche du dictionnaire! Ici, vous pouvez saisir n\'importe quel mot et parcourir plusieurs définitions.</string>
+    <string name="second_instruction_text">Après avoir recherché le mot qui vous intéresse, vous pouvez enregistrer le mot dans une liste ici!</string>
+    <string name="third_instruction_text">Il vous suffit de cliquer sur la définition qui vous intéresse et d\'utiliser les icônes de la barre d\'outils pour enregistrer ou supprimer la définition de votre propre liste</string>
+    <string name="fourth_instruction_text">Merci d\'avoir consulté notre application de dictionnaire!</string>
+    <string name="dictionary_about">Application de dictionnaire créée par Christopher St.Aubin</string>
+    <string name="dictionary_instruction_sb">FERMER</string>
+    <string name="dictionary_homebtn_alrt">Êtes-vous sûr de vouloir revenir à la page d\'accueil?</string>
+    <string name="dictionary_homebtn_alrt_title">Confirmation</string>
+    <string name="dictionary_homebtn_alrt_cancel">Annuler</string>
+    <string name="dictionary_homebtn_alrt_yes">Yes</string>
+    <string name="dictionary_recpbtn_alrt">Êtes-vous sûr de vouloir accéder à la page de recherche de recettes ?</string>
+    <string name="dictionary_recpbtn_alrt_title">Confirmation</string>
+    <string name="dictionary_recpbtn_alrt_cancel">Annuler</string>
+    <string name="dictionary_recpbtn_alrt_yes">Oui</string>
+    <string name="dictionary_songbtn_alrt">Êtes-vous sûr de vouloir accéder à la page de recherche de chansons?</string>
+    <string name="dictionary_songbtn_alrt_title">Confirmation</string>
+    <string name="dictionary_songbtn_alrt_cancel">Annuler</string>
+    <string name="dictionary_songbtn_alrt_yes">Oui</string>
+    <string name="dictionary_sunbtn_alrt">Êtes-vous sûr de vouloir accéder à la page Sunrise Sunset?</string>
+    <string name="dictionary_sunbtn_alrt_title">Confirmation</string>
+    <string name="dictionary_sunbtn_alrt_cancel">Annuler</string>
+    <string name="dictionary_sunbtn_alrt_yes">Oui</string>
+    <string name="dictionary_main_btn">RECHERCHER</string>
+    <string name="dictionary_main_editText">Rechercher quelque chose</string>
+    <string name="dict_delete_msg">Are you sure you want to delete this definition?</string>
+    <string name="dict_delete_title">Question:</string>
+    <string name="dict_del_neg">No</string>
+    <string name="dict_del_pos">Yes</string>
+    <string name="dict_del_sb">You deleted definition </string>
+    <string name="dict_del_sb_undo">UNDO </string>
+
+<!--Song-->
     <string name="About">About</string>
     <string name="Help">Help</string>
     <string name="Title">Title</string>
     <string name="Duration">Duration</string>
     <string name="Album">Album Name</string>
+    <string name="app_name">GroupAppilcation</string>
 
 </resources>
