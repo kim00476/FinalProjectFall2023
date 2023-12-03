@@ -9,7 +9,8 @@
         android:id="@+id/titleView"
         android:layout_width="0dp"
         android:layout_height="30dp"
-        android:text="Title: "
+        android:layout_marginTop="4dp"
+        android:text="@string/Title"
         android:textSize="16dp"
         app:layout_constraintEnd_toStartOf="@+id/addButton"
         app:layout_constraintHorizontal_bias="0.0"
@@ -20,7 +21,7 @@
         android:id="@+id/durationView"
         android:layout_width="0dp"
         android:layout_height="30dp"
-        android:text="Duration: "
+        android:text="@string/Duration"
         android:textSize="16dp"
         app:layout_constraintEnd_toEndOf="@+id/titleView"
         app:layout_constraintStart_toStartOf="@+id/titleView"
@@ -30,7 +31,7 @@
         android:id="@+id/albumNameView"
         android:layout_width="0dp"
         android:layout_height="30dp"
-        android:text="Album Name: "
+        android:text="@string/Album"
         android:textSize="16dp"
         app:layout_constraintEnd_toEndOf="@+id/durationView"
         app:layout_constraintHorizontal_bias="0.0"
@@ -41,6 +42,7 @@
         android:id="@+id/albumImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
@@ -49,21 +51,22 @@
         android:id="@+id/addButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:contentDescription="@string/imageButtonDescription"
         android:onClick="addToFavorite"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/titleView"
+        app:layout_constraintTop_toTopOf="@+id/albumImage"
         app:srcCompat="@android:drawable/ic_input_add" />
 
     <Button
         android:id="@+id/favButton"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:text="View Favorite Song List"
         android:onClick="goToFavoriteSong"
+        android:text="View Favorite Song List"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

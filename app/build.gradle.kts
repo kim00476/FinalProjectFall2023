@@ -10,6 +10,7 @@ android {
         viewBinding = true
     }
 
+
     defaultConfig {
         applicationId = "algonquin.cst2335.groupappilcation"
         minSdk = 24

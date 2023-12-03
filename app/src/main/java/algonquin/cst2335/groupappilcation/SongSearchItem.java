@@ -9,44 +9,59 @@ public class SongSearchItem {
 
     @PrimaryKey(autoGenerate = true) //database will increment them for us
     @ColumnInfo(name="id")
-    public long id;
+    long id;
 
     @ColumnInfo(name="name")
     public String name;
-
-    @ColumnInfo(name = "tracklist")
-    public String tracklist;
 
     @ColumnInfo(name = "title")
     public String title;
 
     @ColumnInfo(name = "duration")
-    public String duration;
+    public int duration;
 
     @ColumnInfo(name = "picture_small")
     public String picture_small;
 
-    public SongSearchItem(String name, String tracklist, String title, String duration, String picture_small) {
-        this.id = id;
-        this.name = name;
-        this.tracklist = tracklist;
-        this.title = title;
-        this.duration = duration;
-        this.picture_small = picture_small;
+    @ColumnInfo(name = "tracklist")
+    public String tracklist;
+
+    @ColumnInfo(name = "removeButton")
+    public boolean removeButton;
+    @ColumnInfo(name = "deleteAllSong")
+    public boolean deleteAllSong;
+
+    public SongSearchItem(){  }
+
+    public SongSearchItem(String n, String t, int d,
+                          String pic, boolean del, boolean rem) {
+        this.name = n;
+        this.title = t;
+        this.duration = d;
+        this.picture_small = pic;
+        this.deleteAllSong = del;
+        this.removeButton = rem;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getTracklist(){
-        return tracklist;
+    public String getTitle() {
+        return title;
     }
 
-    public String getTitle(){ return title; }
+    public int getDuration() {
+        return duration;
+    }
 
-    public String getDuration(){ return duration;}
+    public String getPicture_small() {
+        return picture_small;
+    }
 
-    public String getPicture_small(){return picture_small;}
+    public boolean isRemoveButton (){ return removeButton;    }
+
+    public boolean isDeleteAllSong (){ return deleteAllSong;    }
 
 }
+
