@@ -2,19 +2,19 @@
 <resources>
 
     <!--    toolbar strings -->
-    <string name="delete">Supprimer</string>
-    <string name="about">À propos de</string>
+    <string name="delete">Delete</string>
+    <string name="about">About</string>
     <string name="help">Aide</string>
-    <string name="search">Recherche</string>
-    <string name="app_name1">GroupAppilcation</string>
+    <string name="search">Help</string>
+    <string name="app_name1">GroupAppilcatio</string>
 
     <!--    Main activity strings-->
-    <string name="main_message">Bienvenue a la Application!</string>
-    <string name="main_recipebtn">Recettes</string>
-    <string name="main_dictionarybtn">Dictionnaire</string>
-    <string name="main_songbtn">Chansons</string>
-    <string name="main_sunsetbtn">Lever de Solei</string>
-    <string name="main_toast_dict">Aller au Dictionnaire</string>
+    <string name="main_message">Welcome to our app!</string>
+    <string name="main_recipebtn">Recipe Search</string>
+    <string name="main_dictionarybtn">Word Search</string>
+    <string name="main_songbtn">Song Search</string>
+    <string name="main_sunsetbtn">Sunrise Sunset</string>
+    <string name="main_toast_dict">Moving to the Dictionary</string>
 
     <!--    sunrise sunset strings -->
     <string name="enterLatitude">Enter latitude:</string>
@@ -58,12 +58,19 @@
     <string name="dictionary_sunbtn_alrt_yes">Oui</string>
     <string name="dictionary_main_btn">RECHERCHER</string>
     <string name="dictionary_main_editText">Rechercher quelque chose</string>
+    <string name="dict_delete_msg">Are you sure you want to delete this definition?</string>
+    <string name="dict_delete_title">Question:</string>
+    <string name="dict_del_neg">No</string>
+    <string name="dict_del_pos">Yes</string>
+    <string name="dict_del_sb">You deleted definition </string>
+    <string name="dict_del_sb_undo">UNDO </string>
+
 <!--Song-->
-    <string name="saveYourFavorite">Save your favorite</string>
     <string name="About">About</string>
     <string name="Help">Help</string>
     <string name="Title">Title</string>
     <string name="Duration">Duration</string>
     <string name="Album">Album Name</string>
+    <string name="app_name">GroupAppilcation</string>
 
 </resources>
