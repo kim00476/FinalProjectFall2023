@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+        <!--    toolbar strings -->
+        <string name="delete">Supprimer</string>
+        <string name="about">À propos de</string>
+        <string name="help">Aide</string>
+        <string name="search">Recherche</string>
+        <string name="app_name1">GroupAppilcation</string>
+
+        <!--    Main activity strings-->
+        <string name="main_message">Bienvenue a la Application!</string>
+        <string name="main_recipebtn">Recettes</string>
+        <string name="main_dictionarybtn">Dictionnaire</string>
+        <string name="main_songbtn">Chansons</string>
+        <string name="main_sunsetbtn">Lever de Solei</string>
+        <string name="main_toast_dict">Aller au Dictionnaire</string>
+
+        <!--    sunrise sunset strings -->
+        <string name="enterLatitude">Enter latitude:</string>
+        <string name="enterLongitude">Enter longitude:</string>
+        <string name="how_to_look_up_location1">This application is design for looking up sunset or sunrise time for a specific location.</string>
+        <string name="how_to_look_up_location2">Please enter the latitude and longitude in the corresponding search bar then click "search".</string>
+        <string name="how_to_look_up_location3">You can also save or delete your favorite locations by clicking the corresponding buttons at the bottom and on the top.</string>
+        <string name="how_to_look_up_location4">By tapping an existing record, you will get the current times for date of today.</string>
+
+        <!--    recipe strings -->
+        <string name="saveYourFavorite">Save your favorite</string>
+        <string name="recipe_edit_text_hint">Search recipe by name</string>
+        <string name="search_button_text">Search</string>
+        <string name="view_saved_recipes_button">View Saved Recipes</string>
+        <string name="recipe_image_desc">Recipe Image</string>
+        <string name="recipe_title_placeholder">Recipe Title Goes Here</string>
+
+
+        <!--    dictionary strings -->
+        <string name="first_instruction_text">Bienvenue sur la page de recherche du dictionnaire! Ici, vous pouvez saisir n\'importe quel mot et parcourir plusieurs définitions.</string>
+        <string name="second_instruction_text">Après avoir recherché le mot qui vous intéresse, vous pouvez enregistrer le mot dans une liste ici!</string>
+        <string name="third_instruction_text">Il vous suffit de cliquer sur la définition qui vous intéresse et d\'utiliser les icônes de la barre d\'outils pour enregistrer ou supprimer la définition de votre propre liste</string>
+        <string name="fourth_instruction_text">Merci d\'avoir consulté notre application de dictionnaire!</string>
+        <string name="dictionary_about">Application de dictionnaire créée par Christopher St.Aubin</string>
+        <string name="dictionary_instruction_sb">FERMER</string>
+        <string name="dictionary_homebtn_alrt">Êtes-vous sûr de vouloir revenir à la page d\'accueil?</string>
+        <string name="dictionary_homebtn_alrt_title">Confirmation</string>
+        <string name="dictionary_homebtn_alrt_cancel">Annuler</string>
+        <string name="dictionary_homebtn_alrt_yes">Yes</string>
+        <string name="dictionary_recpbtn_alrt">Êtes-vous sûr de vouloir accéder à la page de recherche de recettes ?</string>
+        <string name="dictionary_recpbtn_alrt_title">Confirmation</string>
+        <string name="dictionary_recpbtn_alrt_cancel">Annuler</string>
+        <string name="dictionary_recpbtn_alrt_yes">Oui</string>
+        <string name="dictionary_songbtn_alrt">Êtes-vous sûr de vouloir accéder à la page de recherche de chansons?</string>
+        <string name="dictionary_songbtn_alrt_title">Confirmation</string>
+        <string name="dictionary_songbtn_alrt_cancel">Annuler</string>
+        <string name="dictionary_songbtn_alrt_yes">Oui</string>
+        <string name="dictionary_sunbtn_alrt">Êtes-vous sûr de vouloir accéder à la page Sunrise Sunset?</string>
+        <string name="dictionary_sunbtn_alrt_title">Confirmation</string>
+        <string name="dictionary_sunbtn_alrt_cancel">Annuler</string>
+        <string name="dictionary_sunbtn_alrt_yes">Oui</string>
+        <string name="dictionary_main_btn">RECHERCHER</string>
+        <string name="dictionary_main_editText">Rechercher quelque chose</string>
+    </resources>

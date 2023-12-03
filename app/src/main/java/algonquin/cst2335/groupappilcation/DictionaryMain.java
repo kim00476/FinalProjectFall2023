@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,43 +46,73 @@ import java.util.concurrent.Executors;
 import algonquin.cst2335.groupappilcation.Data.DictionaryModel;
 import algonquin.cst2335.groupappilcation.databinding.ActivityDictionaryMainBinding;
 
+
+/**
+ * Main activity for the Dictionary application.
+ */
 public class DictionaryMain extends AppCompatActivity {
 
+    /** Binding for the activity */
     private ActivityDictionaryMainBinding binding;
+
+    /** Volley request queue for handling API requests */
     private RequestQueue queue;
+
+    /** Adapter for the RecyclerView */
     private DictionaryAdapter adapter;
+
+    /** List to store dictionary items for the RecyclerView */
     private List<DictionaryItem> dataList;
+
+    /** List to store search history */
     private List<String> searchHistory;
+
+    /** List to store dictionary items from the ViewModel */
     private ArrayList<DictionaryItem> dictionaryItem;
+
+    /** ViewModel for managing data */
     private DictionaryModel dictionaryModel;
+
+    /** Room Database Access Object for dictionary items */
     private DictionaryItemDAO wDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        /**  Initialize variables and set up UI */
         setupViewModel();
         initializeVariables();
         setupToolbar();
         setupSharedPreferences();
 
+
+        /** Set up click listener for the search button */
         binding.button.setOnClickListener(click -> {
             handleSearchButtonClick();
         });
 
+        /** Set up RecyclerView  */
         setupRecyclerView();
 
     }
 
+    /**
+     * Initialize variables used in the activity.
+     */
     private void initializeVariables() {
         binding = ActivityDictionaryMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        /** Initialize Volley request queue */
         queue = Volley.newRequestQueue(this);
+
+        /** Initialize lists and adapter */
         dataList = new ArrayList<>();
         searchHistory = new ArrayList<>();
         adapter = new DictionaryAdapter(dictionaryModel, dataList);
 
-
+        /** Initialize Room Database and DAO */
         DictionaryDatabase db = Room.databaseBuilder(getApplicationContext(), DictionaryDatabase.class, "dictionary-db")
                 .build();
         wDAO = db.dictionaryItemDAO();
@@ -88,13 +120,20 @@ public class DictionaryMain extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Set up ViewModel for the activity.
+     */
     private void setupViewModel() {
         dictionaryModel = new ViewModelProvider(this).get(DictionaryModel.class);
         dictionaryModel.selectedDefinition.observe(this, (newDefinitionValue) ->
                 showDefinitionFragment(newDefinitionValue));
     }
 
+    /**
+     * Show the definition fragment when a dictionary item is selected.
+     *
+     * @param item The selected dictionary item.
+     */
     private void showDefinitionFragment(DictionaryItem item) {
         DictionaryFragment dictionaryFragment = new DictionaryFragment(item);
         FragmentManager fMgr = getSupportFragmentManager();
@@ -104,16 +143,25 @@ public class DictionaryMain extends AppCompatActivity {
         tx.commit();
     }
 
+    /**
+     * Set up the toolbar for the activity.
+     */
     private void setupToolbar() {
         setSupportActionBar(binding.dictionaryToolbar);
     }
 
+    /**
+     * Set up shared preferences for the activity.
+     */
     private void setupSharedPreferences() {
         SharedPreferences prefs = getSharedPreferences("MyDictionaryData", Context.MODE_PRIVATE);
         String wordFormSearch = prefs.getString("WordSearched", "");
         binding.dictionarySearch.setText(wordFormSearch);
     }
 
+    /**
+     * Handle the click event for the search button.
+     */
     private void handleSearchButtonClick() {
         SharedPreferences.Editor editor = getSharedPreferences("MyDictionaryData", Context.MODE_PRIVATE).edit();
         EditText word = findViewById(R.id.dictionarySearch);
@@ -121,11 +169,13 @@ public class DictionaryMain extends AppCompatActivity {
         editor.putString("WordSearched", wordSearched);
         editor.apply();
 
+        /** Build API URL for the searched word */
         String stringUrl = buildApiUrl(wordSearched);
 
-        // Clear dataList before adding new items
+        /** Clear dataList before adding new items */
         dataList.clear();
 
+        /** Make API request to get dictionary definitions */
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, stringUrl, null,
                 (response) -> {
                     try {
@@ -140,6 +190,7 @@ public class DictionaryMain extends AppCompatActivity {
 
         queue.add(request);
 
+        /** Load dictionary items from Room Database */
         dictionaryItem = dictionaryModel.dictionaryItem.getValue();
         if (dictionaryItem == null)
             dictionaryModel.dictionaryItem.postValue(dictionaryItem = new ArrayList<>());
@@ -150,13 +201,21 @@ public class DictionaryMain extends AppCompatActivity {
             runOnUiThread(() -> binding.recycleView.setAdapter(adapter));
         });
 
+        /** Add searched word to search history if not already present */
         if (!searchHistory.contains(wordSearched)) {
             searchHistory.add(wordSearched);
         }
+
+        /** Update options menu */
         invalidateOptionsMenu();
     }
 
-
+    /**
+     * Build the API URL for the given searched word.
+     *
+     * @param wordSearched The word to search for.
+     * @return The formatted API URL.
+     */
     private String buildApiUrl(String wordSearched) {
         try {
             return "https://api.dictionaryapi.dev/api/v2/entries/en/" + URLEncoder.encode(wordSearched, "UTF-8");
@@ -165,11 +224,18 @@ public class DictionaryMain extends AppCompatActivity {
         }
     }
 
+    /**
+     * Process the API response and update the UI with dictionary definitions.
+     *
+     * @param response      The JSON array response from the API.
+     * @param wordSearched  The word that was searched.
+     * @throws JSONException If there is an issue parsing the JSON response.
+     */
     private void processApiResponse(JSONArray response, String wordSearched) throws JSONException {
         JSONObject results = response.getJSONObject(0);
         JSONArray meanings = results.getJSONArray("meanings");
 
-        // Clear dataList before adding new items
+        /** Clear dataList before adding new items */
         dataList.clear();
 
         for (int i = 0; i < meanings.length(); i++) {
@@ -178,16 +244,17 @@ public class DictionaryMain extends AppCompatActivity {
 
             for (int j = 0; j < aDefinition.length(); j++) {
                 String def = aDefinition.getJSONObject(j).getString("definition");
-                Log.d("Received Definition", def);
                 DictionaryItem thisItem = new DictionaryItem(wordSearched, def);
                 dataList.add(thisItem);
 
+                /** Insert the word into Room Database */
                 Executors.newSingleThreadExecutor().execute(()-> {
                         thisItem.id =(int) wDAO.insertWord(thisItem);
                 });
 
             }
 
+            /** Notify adapter of data changes */
             adapter.notifyDataSetChanged();
         }
     }
@@ -199,26 +266,106 @@ public class DictionaryMain extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
+    /**
+     * Override method to create the options menu.
+     * Inflates the menu from the XML resource and sets up a Spinner in the Toolbar.
+     *
+     * @param menu The options menu in which items are placed.
+     * @return Returns true for the menu to be displayed; if you return false, it will not be shown.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.dictionary_menu, menu);
 
-        // Access the submenu of the "History" item
-        SubMenu historySubMenu = menu.findItem(R.id.history).getSubMenu();
+        /** Retrieve the Spinner from the Toolbar */
+        MenuItem spinnerItem = menu.findItem(R.id.history);
+        Spinner spinner = (Spinner) spinnerItem.getActionView();
 
-        // Retrieve searchHistory from SharedPreferences
-        SharedPreferences prefs = getSharedPreferences("MyDictionaryData", Context.MODE_PRIVATE);
-        String searchHistoryString = prefs.getString("SearchHistory", "");
-        List<String> searchHistory = Arrays.asList(searchHistoryString.split(","));
+        /** Perform database operation in a background thread */
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
 
-        // Add items from searchHistory to the submenu dynamically
-        for (int i = 0; i < searchHistory.size(); i++) {
-            historySubMenu.add(Menu.NONE, Menu.NONE, i, searchHistory.get(i));
-        }
+                /** Access the database on a background thread */
+                final List<String> words = wDAO.getAllWords();
+
+                /** Update the UI on the main thread */
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        /** Create an ArrayAdapter for the Spinner */
+                        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
+                                DictionaryMain.this, android.R.layout.simple_spinner_dropdown_item, words);
+                        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spinner.setAdapter(spinnerAdapter);
+
+                        /** Set an OnItemSelectedListener for the Spinner */
+                        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                            /**
+                             * Called when an item in the Spinner is selected.
+                             *
+                             * @param parent   The AdapterView where the selection happened.
+                             * @param view     The view within the AdapterView that was clicked.
+                             * @param position The position of the view in the adapter.
+                             * @param id       The row id of the item that is selected.
+                             */
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                String selectedWord = (String) spinner.getItemAtPosition(position);
+                                retrieveDefinitions(selectedWord);
+                            }
+
+                            /**
+                             * Called when nothing is selected in the Spinner.
+                             *
+                             * @param parent The AdapterView where nothing is selected.
+                             */
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
+                    }
+                });
+            }
+        }).start();
+
         return true;
     }
 
+    /**
+     * Retrieve definitions from the database based on the selected word and update the RecyclerView.
+     *
+     * @param selectedWord The word selected in the Spinner.
+     */
+    private void retrieveDefinitions(String selectedWord) {
+
+        /** Perform database operation in a background thread */
+    new Thread(new Runnable() {
+        @Override
+        public void run() {
+
+            /** Access the database on a background thread */
+            final List<DictionaryItem> definitions = wDAO.getItemByWord(selectedWord);
+
+            /** Update the UI on the main thread */
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    /** Update the RecyclerView with the retrieved definitions */
+                    adapter.setData(definitions);
+                }
+            });
+        }
+    }).start();
+    }
+
+    int position = 0;
+    DictionaryFragment dictionaryFragment;
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -241,11 +388,53 @@ public class DictionaryMain extends AppCompatActivity {
             case R.id.btnSunset:
                 showSunsetConfirmationDialog();
                 return true;
+            case R.id.delete_item:
+
+                /**
+                 * Handle the delete action when the delete icon is clicked.
+                 */
+                dictionaryFragment = new DictionaryFragment(dataList.get(position));
+                DictionaryItem selectedItem = dictionaryModel.selectedDefinition.getValue();
+                AlertDialog.Builder builder = new AlertDialog.Builder(DictionaryMain.this);
+                if (selectedItem != null && dictionaryFragment != null) {
+                    builder.setMessage(getString(R.string.dict_delete_msg) + dictionaryModel.selectedDefinition.getValue().getDefinition())
+                            .setTitle(getString(R.string.dict_delete_title))
+                            .setNegativeButton(getString(R.string.dict_del_neg), (dialog, cl) -> {
+                            })
+                            .setPositiveButton(getString(R.string.dict_del_pos), (dialog, cl) -> {
+                            dictionaryItem.remove(dataList.get(position));
+                            adapter.notifyItemRemoved(position);
+
+                            Executor thread1 = Executors.newSingleThreadExecutor();
+                            thread1.execute(() ->{
+                            getSupportFragmentManager().popBackStack();
+                            wDAO.deleteWord(dictionaryModel.selectedDefinition.getValue());
+                            dictionaryFragment = null;});
+
+                            Snackbar.make(binding.getRoot(), getString(R.string.dict_del_sb) + position, Snackbar.LENGTH_LONG)
+                                    .setAction(getString(R.string.dict_del_sb_undo), clk -> {
+                                        Executor thread2 = Executors.newSingleThreadExecutor();
+                                        thread2.execute(() -> {
+                                            int id = (int) wDAO.insertWord(dictionaryModel.selectedDefinition.getValue());
+                                            dictionaryModel.selectedDefinition.getValue().id = id;
+                                        });
+
+                                        dictionaryItem.add(position, dictionaryModel.selectedDefinition.getValue());
+                                        adapter.notifyItemInserted(position);
+                                    }).show();
+                            }).create().show();
+                }
+
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Show instructions in a Snackbar.
+     *
+     * @param view The view to anchor the Snackbar.
+     */
     private void showInstructionsSnackbar(View view) {
         String instruction1 = getString(R.string.first_instruction_text);
         String instruction2 = getString(R.string.second_instruction_text);
@@ -258,7 +447,7 @@ public class DictionaryMain extends AppCompatActivity {
         textView.setText(allInstructions);
 
         Snackbar snackbar = Snackbar.make(view, "", Snackbar.LENGTH_INDEFINITE);
-        snackbar.setAction("CLOSE", v -> snackbar.dismiss());
+        snackbar.setAction(getString(R.string.dictionary_instruction_sb), v -> snackbar.dismiss());
 
         Snackbar.SnackbarLayout snackbarLayout = (Snackbar.SnackbarLayout) snackbar.getView();
         snackbarLayout.addView(customView, 0);
@@ -266,19 +455,25 @@ public class DictionaryMain extends AppCompatActivity {
         snackbar.show();
     }
 
+    /**
+     * Show "About" information in a Toast.
+     */
     private void showAboutToast() {
-        Toast.makeText(this, "Dictionary App made by Christopher St.Aubin", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.dictionary_about), Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Show a confirmation dialog for navigating back to the home activity.
+     */
     private void showHomeConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to leave this page?")
-                .setTitle("Confirmation")
-                .setNegativeButton("Cancel", (dialog, cl) -> {
-                    // User canceled, do nothing
+        builder.setMessage(getString(R.string.dictionary_homebtn_alrt))
+                .setTitle(getString(R.string.dictionary_homebtn_alrt_title))
+                .setNegativeButton(getString(R.string.dictionary_homebtn_alrt_cancel), (dialog, cl) -> {
+                    /** User canceled, do nothing */
                 })
-                .setPositiveButton("Yes", (dialog, cl) -> {
-                    // User confirmed, navigate back to MainActivity
+                .setPositiveButton(getString(R.string.dictionary_homebtn_alrt_yes), (dialog, cl) -> {
+                    /** User confirmed, navigate back to MainActivity */
                     Intent intent = new Intent(this, MainActivity.class);
                     startActivity(intent);
                 })
@@ -287,13 +482,13 @@ public class DictionaryMain extends AppCompatActivity {
 
     private void showRecipeConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to move to the Recipe Search page?")
-                .setTitle("Confirmation")
-                .setNegativeButton("Cancel", (dialog, cl) -> {
-                    // User canceled, do nothing
+        builder.setMessage(getString(R.string.dictionary_recpbtn_alrt))
+                .setTitle(getString(R.string.dictionary_recpbtn_alrt_title))
+                .setNegativeButton(getString(R.string.dictionary_recpbtn_alrt_cancel), (dialog, cl) -> {
+                    /** User canceled, do nothing */
                 })
-                .setPositiveButton("Yes", (dialog, cl) -> {
-                    // User confirmed, navigate to RecipeSearchMain
+                .setPositiveButton(getString(R.string.dictionary_recpbtn_alrt_yes), (dialog, cl) -> {
+                    /** User confirmed, navigate to RecipeSearchMain */
                     startActivity(new Intent(this, RecipeSearchMain.class));
                 })
                 .create().show();
@@ -301,13 +496,13 @@ public class DictionaryMain extends AppCompatActivity {
 
     private void showSongConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to move to the Song Search page?")
-                .setTitle("Confirmation")
-                .setNegativeButton("Cancel", (dialog, cl) -> {
-                    // User canceled, do nothing
+        builder.setMessage(getString(R.string.dictionary_songbtn_alrt))
+                .setTitle(getString(R.string.dictionary_songbtn_alrt_title))
+                .setNegativeButton(getString(R.string.dictionary_songbtn_alrt_cancel), (dialog, cl) -> {
+                    /** User canceled, do nothing */
                 })
-                .setPositiveButton("Yes", (dialog, cl) -> {
-                    // User confirmed, navigate to SongSearchMain
+                .setPositiveButton(getString(R.string.dictionary_songbtn_alrt_yes), (dialog, cl) -> {
+                    /** User confirmed, navigate to SongSearchMain */
                     startActivity(new Intent(this, SongSearchMain.class));
                 })
                 .create().show();
@@ -315,13 +510,13 @@ public class DictionaryMain extends AppCompatActivity {
 
     private void showSunsetConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to move to the Sunset & Sunrise lookup page?")
-                .setTitle("Confirmation")
-                .setNegativeButton("Cancel", (dialog, cl) -> {
-                    // User canceled, do nothing
+        builder.setMessage(getString(R.string.dictionary_sunbtn_alrt))
+                .setTitle(getString(R.string.dictionary_sunbtn_alrt_title))
+                .setNegativeButton(getString(R.string.dictionary_sunbtn_alrt_cancel), (dialog, cl) -> {
+                    /** User canceled, do nothing */
                 })
-                .setPositiveButton("Yes", (dialog, cl) -> {
-                    // User confirmed, navigate to SunsetSunriseMain
+                .setPositiveButton(getString(R.string.dictionary_sunbtn_alrt_yes), (dialog, cl) -> {
+                    /** User confirmed, navigate to SunsetSunriseMain */
                     startActivity(new Intent(this, SunsetSunriseMain.class));
                 })
                 .create().show();

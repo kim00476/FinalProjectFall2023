@@ -11,31 +11,46 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.snackbar.Snackbar;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import algonquin.cst2335.groupappilcation.databinding.ActivitySunsetSunriseMainBinding;
 
 public class SunsetSunriseMain extends AppCompatActivity {
     ActivitySunsetSunriseMainBinding binding;
 
+    RequestQueue queue = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         binding = ActivitySunsetSunriseMainBinding.inflate(getLayoutInflater());
+        queue = Volley.newRequestQueue(this);
         setContentView(binding.getRoot());
+
 
         //initialize the toolbar
         setSupportActionBar(binding.SunsetSunriseToolbar);
 
-
+        //private void setupSharedPreferences() {
         SharedPreferences prefs = getSharedPreferences("MyLocationData", Context.MODE_PRIVATE);
         String searchedLat = prefs.getString("Latitude", "");
-        String searchedLong = prefs.getString("Longitude","");
+        String searchedLong = prefs.getString("Longitude", "");
         binding.latitudeInput.setText(searchedLat);
         binding.longitudeInput.setText(searchedLong);
 
-        binding.SearchButton.setOnClickListener(click -> {
+
+        binding.searchButton.setOnClickListener(click -> {
             String latitude = binding.latitudeInput.getText().toString();
             String longitude = binding.longitudeInput.getText().toString();
 
@@ -43,6 +58,38 @@ public class SunsetSunriseMain extends AppCompatActivity {
             editor.putString("Latitude", latitude);
             editor.putString("Longitude", longitude);
             editor.apply();
+
+            double parsedLatitude = Double.parseDouble(latitude);
+            double parsedLongitude = Double.parseDouble(longitude);
+
+            if (isValidLocation(parsedLatitude, parsedLongitude)) {
+                try {
+                    latitude = URLEncoder.encode(binding.latitudeInput.getText().toString(), "UTF-8");
+                    longitude = URLEncoder.encode(binding.longitudeInput.getText().toString(), "UTF-8");
+
+                    String url = "https://api.sunrisesunset.io/json?lat=" + latitude + "&lng=" + longitude + "&timezone=CA&date=today";
+
+                    JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                            (response) -> {
+                                try {
+                                    JSONObject mainObj = response.getJSONObject("results");
+                                    String sunrise = mainObj.getString("sunrise");
+                                    String sunset = mainObj.getString("sunset");
+                                } catch (JSONException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }, (error) -> {
+                    });
+
+                    queue.add(request);//fetches from the server
+
+                } catch (UnsupportedEncodingException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                // Handle invalid location
+                Toast.makeText(this, "Invalid location. Please enter valid latitude and longitude.", Toast.LENGTH_LONG).show();
+            }
         });
     }
 
@@ -57,13 +104,13 @@ public class SunsetSunriseMain extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.delete_item:
                 Snackbar.make(binding.SunsetSunriseToolbar, "Confirm deletion?", Snackbar.LENGTH_LONG).show();
                 break;
 
             case R.id.about_item:
-                Toast.makeText(this,"Version 1.0, created by Yuyao He", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Version 1.0, created by Yuyao He", Toast.LENGTH_LONG).show();
                 break;
 
             case R.id.howToUse_item:
@@ -87,5 +134,11 @@ public class SunsetSunriseMain extends AppCompatActivity {
                 .setNegativeButton("OK", (dialog, cl) -> {
                 })
                 .create().show();
+    }
+
+
+    public boolean isValidLocation(double parsedLatitude, double parsedLongitude) {
+        return parsedLatitude >= -90.0 && parsedLatitude <= 90.0 &&
+                parsedLongitude >= -180.0 && parsedLongitude <= 180.0;
     }
 }

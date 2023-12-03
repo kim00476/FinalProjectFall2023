@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,9 +8,9 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:layout_width="202dp"
+        android:layout_width="wrap_content"
         android:layout_height="28dp"
-        android:text="Welcome to our app!"
+        android:text="@string/main_message"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="284dp"
         android:layout_marginEnd="8dp"
-        android:text="Recipe search"
+        android:text="@string/main_recipebtn"
         app:layout_constraintEnd_toEndOf="@+id/sunriseButton"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Dictionary search"
+        android:text="@string/main_dictionarybtn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/sunriseButton"
         app:layout_constraintHorizontal_bias="0.0"
@@ -46,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="284dp"
-        android:text="Song search"
+        android:text="@string/main_songbtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.187"
         app:layout_constraintStart_toStartOf="parent"
@@ -58,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="36dp"
-        android:text="Sunrise sunset"
+        android:text="@string/main_sunsetbtn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recipeButton"
