@@ -4,9 +4,9 @@
     <!--    toolbar strings -->
     <string name="delete">Delete</string>
     <string name="about">About</string>
-    <string name="help">Aide</string>
+    <string name="help">Help</string>
     <string name="search">Help</string>
-    <string name="app_name1">GroupAppilcatio</string>
+    <string name="app_name1">GroupAppilcation</string>
 
     <!--    Main activity strings-->
     <string name="main_message">Welcome to our app!</string>
@@ -34,30 +34,30 @@
 
 
     <!--    dictionary strings -->
-    <string name="first_instruction_text">Bienvenue sur la page de recherche du dictionnaire! Ici, vous pouvez saisir n\'importe quel mot et parcourir plusieurs définitions.</string>
-    <string name="second_instruction_text">Après avoir recherché le mot qui vous intéresse, vous pouvez enregistrer le mot dans une liste ici!</string>
-    <string name="third_instruction_text">Il vous suffit de cliquer sur la définition qui vous intéresse et d\'utiliser les icônes de la barre d\'outils pour enregistrer ou supprimer la définition de votre propre liste</string>
-    <string name="fourth_instruction_text">Merci d\'avoir consulté notre application de dictionnaire!</string>
-    <string name="dictionary_about">Application de dictionnaire créée par Christopher St.Aubin</string>
-    <string name="dictionary_instruction_sb">FERMER</string>
-    <string name="dictionary_homebtn_alrt">Êtes-vous sûr de vouloir revenir à la page d\'accueil?</string>
+    <string name="first_instruction_text">Welcome to the Dictionary Word search!</string>
+    <string name="second_instruction_text">Type any word inside the text area to be able to view definitions.</string>
+    <string name="third_instruction_text">The words are saved to a database, which you can view the word in the toolbar. After opening the selected word you can delete the items!</string>
+    <string name="fourth_instruction_text">Thank you for checking out my Dictionary Search App!</string>
+    <string name="dictionary_about">Dictionary Search app made by Christopher St.Aubin</string>
+    <string name="dictionary_instruction_sb">CLOSE</string>
+    <string name="dictionary_homebtn_alrt">Are you sure you want to go back to home?</string>
     <string name="dictionary_homebtn_alrt_title">Confirmation</string>
-    <string name="dictionary_homebtn_alrt_cancel">Annuler</string>
+    <string name="dictionary_homebtn_alrt_cancel">Cancel</string>
     <string name="dictionary_homebtn_alrt_yes">Yes</string>
-    <string name="dictionary_recpbtn_alrt">Êtes-vous sûr de vouloir accéder à la page de recherche de recettes ?</string>
+    <string name="dictionary_recpbtn_alrt">Are you sure you want to move to the Recipe Search page?</string>
     <string name="dictionary_recpbtn_alrt_title">Confirmation</string>
-    <string name="dictionary_recpbtn_alrt_cancel">Annuler</string>
-    <string name="dictionary_recpbtn_alrt_yes">Oui</string>
-    <string name="dictionary_songbtn_alrt">Êtes-vous sûr de vouloir accéder à la page de recherche de chansons?</string>
+    <string name="dictionary_recpbtn_alrt_cancel">Cancel</string>
+    <string name="dictionary_recpbtn_alrt_yes">Yes</string>
+    <string name="dictionary_songbtn_alrt">Are you sure you want to move to the Song Search page?</string>
     <string name="dictionary_songbtn_alrt_title">Confirmation</string>
-    <string name="dictionary_songbtn_alrt_cancel">Annuler</string>
-    <string name="dictionary_songbtn_alrt_yes">Oui</string>
-    <string name="dictionary_sunbtn_alrt">Êtes-vous sûr de vouloir accéder à la page Sunrise Sunset?</string>
+    <string name="dictionary_songbtn_alrt_cancel">Cancel</string>
+    <string name="dictionary_songbtn_alrt_yes">Yes</string>
+    <string name="dictionary_sunbtn_alrt">Are you sure you want to move to the Sunrise Sunset page?</string>
     <string name="dictionary_sunbtn_alrt_title">Confirmation</string>
-    <string name="dictionary_sunbtn_alrt_cancel">Annuler</string>
-    <string name="dictionary_sunbtn_alrt_yes">Oui</string>
-    <string name="dictionary_main_btn">RECHERCHER</string>
-    <string name="dictionary_main_editText">Rechercher quelque chose</string>
+    <string name="dictionary_sunbtn_alrt_cancel">Cancel</string>
+    <string name="dictionary_sunbtn_alrt_yes">Yes</string>
+    <string name="dictionary_main_btn">SEARCH</string>
+    <string name="dictionary_main_editText">Type something here</string>
     <string name="dict_delete_msg">Are you sure you want to delete this definition?</string>
     <string name="dict_delete_title">Question:</string>
     <string name="dict_del_neg">No</string>
