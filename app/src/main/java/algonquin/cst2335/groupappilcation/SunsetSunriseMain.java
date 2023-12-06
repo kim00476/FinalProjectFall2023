@@ -1,15 +1,20 @@
 package algonquin.cst2335.groupappilcation;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -22,66 +27,86 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import algonquin.cst2335.groupappilcation.Data.SunsetSunriseModel;
 import algonquin.cst2335.groupappilcation.databinding.ActivitySunsetSunriseMainBinding;
+
 
 public class SunsetSunriseMain extends AppCompatActivity {
     ActivitySunsetSunriseMainBinding binding;
-
+    private List<SunsetSunriseItem> dataList;
+    SunsetSunriseAdapter adapter;
     RequestQueue queue = null;
+    SunsetSunriseItemDAO iDao;
+    ArrayList<SunsetSunriseItem> items = new ArrayList<>(); // Initialize the items ArrayList
+    SunsetSunriseModel itemModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivitySunsetSunriseMainBinding.inflate(getLayoutInflater());
-        queue = Volley.newRequestQueue(this);
-        setContentView(binding.getRoot());
-
-
-        //initialize the toolbar
-        setSupportActionBar(binding.SunsetSunriseToolbar);
-
-        //private void setupSharedPreferences() {
-        SharedPreferences prefs = getSharedPreferences("MyLocationData", Context.MODE_PRIVATE);
-        String searchedLat = prefs.getString("Latitude", "");
-        String searchedLong = prefs.getString("Longitude", "");
-        binding.latitudeInput.setText(searchedLat);
-        binding.longitudeInput.setText(searchedLong);
-
+        setupViewModel();
+        initialization();
+        toolBar();
+        setupSharedPreferences();
+        setupRecyclerView();
 
         binding.searchButton.setOnClickListener(click -> {
-            String latitude = binding.latitudeInput.getText().toString();
-            String longitude = binding.longitudeInput.getText().toString();
+            String inputLatitude = binding.latitudeInput.getText().toString();
+            String inputLongitude = binding.longitudeInput.getText().toString();
 
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putString("Latitude", latitude);
-            editor.putString("Longitude", longitude);
+            SharedPreferences.Editor editor = getSharedPreferences("MyLocationData", Context.MODE_PRIVATE).edit();
+            editor.putString("Latitude", inputLatitude);
+            editor.putString("Longitude", inputLongitude);
             editor.apply();
 
-            double parsedLatitude = Double.parseDouble(latitude);
-            double parsedLongitude = Double.parseDouble(longitude);
-
-            if (isValidLocation(parsedLatitude, parsedLongitude)) {
+            if (isValidLocation(inputLatitude, inputLongitude)) {
                 try {
-                    latitude = URLEncoder.encode(binding.latitudeInput.getText().toString(), "UTF-8");
-                    longitude = URLEncoder.encode(binding.longitudeInput.getText().toString(), "UTF-8");
+                    String latitude = URLEncoder.encode(inputLatitude, "UTF-8");
+                    String longitude = URLEncoder.encode(inputLongitude, "UTF-8");
 
                     String url = "https://api.sunrisesunset.io/json?lat=" + latitude + "&lng=" + longitude + "&timezone=CA&date=today";
 
+                    String finalLatitude = latitude;
+                    String finalLongitude = longitude;
                     JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                             (response) -> {
                                 try {
                                     JSONObject mainObj = response.getJSONObject("results");
                                     String sunrise = mainObj.getString("sunrise");
                                     String sunset = mainObj.getString("sunset");
+                                    String date = mainObj.getString("date");
+
+                                    // Save the new item to the database
+                                    SunsetSunriseItem newItem = new SunsetSunriseItem(finalLatitude, finalLongitude, sunrise, sunset, date);
+                                    Executor thread = Executors.newSingleThreadExecutor();
+                                    thread.execute(() -> {
+                                        iDao.insertItem(newItem);
+                                        items.add(newItem);
+                                    });
+
+                                    // Update the RecyclerView
+                                    adapter.notifyDataSetChanged();
+
+                                    // Pass the search results to the fragment
+                                    SunsetSunriseFragment fragment = new SunsetSunriseFragment(newItem);
+
+                                    // Use FragmentTransaction to replace the current fragment with the new one
+                                    getSupportFragmentManager().beginTransaction()
+                                            .replace(R.id.fragmentLocation, fragment)
+                                            .addToBackStack(null)
+                                            .commit();
                                 } catch (JSONException e) {
                                     throw new RuntimeException(e);
                                 }
                             }, (error) -> {
+                        int i = 0;
                     });
 
-                    queue.add(request);//fetches from the server
+                    queue.add(request);
 
                 } catch (UnsupportedEncodingException e) {
                     throw new RuntimeException(e);
@@ -93,12 +118,34 @@ public class SunsetSunriseMain extends AppCompatActivity {
         });
     }
 
+    private void initialization() {
+        binding = ActivitySunsetSunriseMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        queue = Volley.newRequestQueue(this);
+
+        dataList = new ArrayList<>();
+
+        SunsetSunriseDatabase db = Room.databaseBuilder(getApplicationContext(), SunsetSunriseDatabase.class, "sun-db")
+                .build();
+        iDao = db.isDAO();
+
+        // Load all items from the database
+        Executor thread1 = Executors.newSingleThreadExecutor();
+        thread1.execute(() -> {
+            List<SunsetSunriseItem> fromDatabase = iDao.getAllCoordinates();
+            items.addAll(fromDatabase);
+        });
+    }
+
+    private void setupViewModel() {
+        itemModel = new ViewModelProvider(this).get(SunsetSunriseModel.class);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-
         getMenuInflater().inflate(R.menu.sunrisesunset_menu, menu);
-
         return true;
     }
 
@@ -120,25 +167,118 @@ public class SunsetSunriseMain extends AppCompatActivity {
     }
 
     private void instructionAlert() {
-        String howto1 = getString(R.string.how_to_look_up_location1);
-        String howto2 = getString(R.string.how_to_look_up_location2);
-        String howto3 = getString(R.string.how_to_look_up_location3);
-        String howto4 = getString(R.string.how_to_look_up_location4);
-
-        String appInstruction = howto1 + "\n" + howto2 + "\n" + howto3 + "\n" + howto4;
-
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(appInstruction)
-                .setTitle("How to use this?")
-                .setNegativeButton("OK", (dialog, cl) -> {
-                })
-                .create().show();
+        // ... (Existing code)
     }
 
-
-    public boolean isValidLocation(double parsedLatitude, double parsedLongitude) {
+    public boolean isValidLocation(String inputLatitude, String inputLongitude) {
+        double parsedLatitude = Double.parseDouble(inputLatitude);
+        double parsedLongitude = Double.parseDouble(inputLongitude);
         return parsedLatitude >= -90.0 && parsedLatitude <= 90.0 &&
                 parsedLongitude >= -180.0 && parsedLongitude <= 180.0;
+    }
+
+    private void onItemLongClick(int position) {
+        SunsetSunriseItem selectedItem = items.get(position);
+
+        // Delete the item from the database
+        Executor thread = Executors.newSingleThreadExecutor();
+        thread.execute(() -> iDao.deleteItem(selectedItem));
+
+        // Remove the item from the list
+        items.remove(position);
+
+        // Notify the adapter of the change
+        adapter.notifyDataSetChanged();
+
+        // Show a toast or snackbar to indicate deletion
+        Toast.makeText(this, "Item deleted", Toast.LENGTH_SHORT).show();
+    }
+
+    private void setupSharedPreferences() {
+        SharedPreferences prefs = getSharedPreferences("MyLocationData", Context.MODE_PRIVATE);
+        String searchedLat = prefs.getString("Latitude", "");
+        String searchedLong = prefs.getString("Longitude", "");
+        binding.latitudeInput.setText(searchedLat);
+        binding.longitudeInput.setText(searchedLong);
+    }
+
+    public void toolBar() {
+        setSupportActionBar(binding.SunsetSunriseToolbar);
+    }
+
+    private void setupRecyclerView() {
+        RecyclerView recyclerView = binding.sunsetSunriseRecycleView;
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Create a new SunsetSunriseAdapter and set it to the RecyclerView
+        adapter = new SunsetSunriseAdapter(items,
+                // Short click listener
+                position -> {
+                    SunsetSunriseItem selectedItem = items.get(position);
+                    itemModel.selected.observe(this, newSelected -> {
+                        String latitude;
+                        String longitude;
+
+                        try {
+                            latitude = URLEncoder.encode(selectedItem.getLatitude(), "UTF-8");
+                            longitude = URLEncoder.encode(selectedItem.getLongitude(), "UTF-8");
+
+                            String url = "https://api.sunrisesunset.io/json?lat=" + latitude + "&lng=" + longitude + "&timezone=CA&date=today";
+
+                            String finalLatitude = latitude;
+                            String finalLongitude = longitude;
+                            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                                    (response) -> {
+                                        try {
+                                            JSONObject mainObj = response.getJSONObject("results");
+                                            String sunrise = mainObj.getString("sunrise");
+                                            String sunset = mainObj.getString("sunset");
+                                            String date = mainObj.getString("date");
+
+                                            // Save the new item to the database
+                                            SunsetSunriseItem newItem = new SunsetSunriseItem(finalLatitude, finalLongitude, sunrise, sunset, date);
+                                            Executor thread = Executors.newSingleThreadExecutor();
+                                            thread.execute(() -> {
+                                                iDao.insertItem(newItem);
+                                                items.add(newItem);
+                                            });
+
+                                            // Update the RecyclerView
+                                            adapter.notifyDataSetChanged();
+
+                                            // Pass the search results to the fragment
+                                            SunsetSunriseFragment fragment = new SunsetSunriseFragment(newItem);
+
+                                            // Use FragmentTransaction to replace the current fragment with the new one
+                                            getSupportFragmentManager().beginTransaction()
+                                                    .replace(R.id.fragmentLocation, fragment)
+                                                    .addToBackStack(null)
+                                                    .commit();
+                                        } catch (JSONException e) {
+                                            throw new RuntimeException(e);
+                                        }
+                                    }, (error) -> {
+                                int i = 0;
+                            });
+
+                            queue.add(request);
+
+                        } catch (UnsupportedEncodingException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                        SunsetSunriseFragment newFragment = new SunsetSunriseFragment(newSelected);
+                        // Load fragments
+                        FragmentManager fMgr = getSupportFragmentManager();
+                        FragmentTransaction tx = fMgr.beginTransaction();
+                        tx.addToBackStack("back to recycle view");
+                        tx.add(R.id.fragmentLocation, newFragment);
+                        tx.commit(); // Load the fragment
+                    });
+                },
+                // Long click listener
+                this::onItemLongClick);
+
+        recyclerView.setAdapter(adapter);
     }
 }
