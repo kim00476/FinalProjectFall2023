@@ -9,8 +9,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,25 +29,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
 import algonquin.cst2335.groupappilcation.Data.SunsetSunriseModel;
 import algonquin.cst2335.groupappilcation.databinding.ActivitySunsetSunriseMainBinding;
 
-
 public class SunsetSunriseMain extends AppCompatActivity {
     ActivitySunsetSunriseMainBinding binding;
-    private List<SunsetSunriseItem> dataList;
     SunsetSunriseAdapter adapter;
     RequestQueue queue = null;
     SunsetSunriseItemDAO iDao;
-    ArrayList<SunsetSunriseItem> items = new ArrayList<>(); // Initialize the items ArrayList
+    ArrayList<SunsetSunriseItem> items = new ArrayList<>();
     SunsetSunriseModel itemModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setupViewModel();
         initialization();
+        setViewModel();
         toolBar();
         setupSharedPreferences();
         setupRecyclerView();
@@ -70,8 +67,6 @@ public class SunsetSunriseMain extends AppCompatActivity {
 
                     String url = "https://api.sunrisesunset.io/json?lat=" + latitude + "&lng=" + longitude + "&timezone=CA&date=today";
 
-                    String finalLatitude = latitude;
-                    String finalLongitude = longitude;
                     JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                             (response) -> {
                                 try {
@@ -80,30 +75,19 @@ public class SunsetSunriseMain extends AppCompatActivity {
                                     String sunset = mainObj.getString("sunset");
                                     String date = mainObj.getString("date");
 
-                                    // Save the new item to the database
-                                    SunsetSunriseItem newItem = new SunsetSunriseItem(finalLatitude, finalLongitude, sunrise, sunset, date);
-                                    Executor thread = Executors.newSingleThreadExecutor();
-                                    thread.execute(() -> {
-                                        iDao.insertItem(newItem);
-                                        items.add(newItem);
-                                    });
+                                    SunsetSunriseItem newItem = new SunsetSunriseItem(latitude, longitude, sunrise, sunset, date);
 
-                                    // Update the RecyclerView
-                                    adapter.notifyDataSetChanged();
+                                    SunsetSunriseFragment fragment = new SunsetSunriseFragment(newItem, iDao);
 
-                                    // Pass the search results to the fragment
-                                    SunsetSunriseFragment fragment = new SunsetSunriseFragment(newItem);
-
-                                    // Use FragmentTransaction to replace the current fragment with the new one
                                     getSupportFragmentManager().beginTransaction()
                                             .replace(R.id.fragmentLocation, fragment)
                                             .addToBackStack(null)
                                             .commit();
+
                                 } catch (JSONException e) {
-                                    throw new RuntimeException(e);
+                                    e.printStackTrace();
                                 }
                             }, (error) -> {
-                        int i = 0;
                     });
 
                     queue.add(request);
@@ -112,7 +96,6 @@ public class SunsetSunriseMain extends AppCompatActivity {
                     throw new RuntimeException(e);
                 }
             } else {
-                // Handle invalid location
                 Toast.makeText(this, "Invalid location. Please enter valid latitude and longitude.", Toast.LENGTH_LONG).show();
             }
         });
@@ -124,22 +107,15 @@ public class SunsetSunriseMain extends AppCompatActivity {
 
         queue = Volley.newRequestQueue(this);
 
-        dataList = new ArrayList<>();
-
         SunsetSunriseDatabase db = Room.databaseBuilder(getApplicationContext(), SunsetSunriseDatabase.class, "sun-db")
                 .build();
         iDao = db.isDAO();
 
-        // Load all items from the database
         Executor thread1 = Executors.newSingleThreadExecutor();
         thread1.execute(() -> {
             List<SunsetSunriseItem> fromDatabase = iDao.getAllCoordinates();
             items.addAll(fromDatabase);
         });
-    }
-
-    private void setupViewModel() {
-        itemModel = new ViewModelProvider(this).get(SunsetSunriseModel.class);
     }
 
     @Override
@@ -167,7 +143,7 @@ public class SunsetSunriseMain extends AppCompatActivity {
     }
 
     private void instructionAlert() {
-        // ... (Existing code)
+        // Needs to be done
     }
 
     public boolean isValidLocation(String inputLatitude, String inputLongitude) {
@@ -180,17 +156,12 @@ public class SunsetSunriseMain extends AppCompatActivity {
     private void onItemLongClick(int position) {
         SunsetSunriseItem selectedItem = items.get(position);
 
-        // Delete the item from the database
         Executor thread = Executors.newSingleThreadExecutor();
         thread.execute(() -> iDao.deleteItem(selectedItem));
 
-        // Remove the item from the list
         items.remove(position);
-
-        // Notify the adapter of the change
         adapter.notifyDataSetChanged();
 
-        // Show a toast or snackbar to indicate deletion
         Toast.makeText(this, "Item deleted", Toast.LENGTH_SHORT).show();
     }
 
@@ -206,13 +177,16 @@ public class SunsetSunriseMain extends AppCompatActivity {
         setSupportActionBar(binding.SunsetSunriseToolbar);
     }
 
+    public void setViewModel() {
+        itemModel = new ViewModelProvider(this).get(SunsetSunriseModel.class);
+        items = itemModel.items;
+    }
+
     private void setupRecyclerView() {
         RecyclerView recyclerView = binding.sunsetSunriseRecycleView;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Create a new SunsetSunriseAdapter and set it to the RecyclerView
         adapter = new SunsetSunriseAdapter(items,
-                // Short click listener
                 position -> {
                     SunsetSunriseItem selectedItem = items.get(position);
                     itemModel.selected.observe(this, newSelected -> {
@@ -228,14 +202,13 @@ public class SunsetSunriseMain extends AppCompatActivity {
                             String finalLatitude = latitude;
                             String finalLongitude = longitude;
                             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                                    (response) -> {
+                                    response -> {
                                         try {
                                             JSONObject mainObj = response.getJSONObject("results");
                                             String sunrise = mainObj.getString("sunrise");
                                             String sunset = mainObj.getString("sunset");
                                             String date = mainObj.getString("date");
 
-                                            // Save the new item to the database
                                             SunsetSunriseItem newItem = new SunsetSunriseItem(finalLatitude, finalLongitude, sunrise, sunset, date);
                                             Executor thread = Executors.newSingleThreadExecutor();
                                             thread.execute(() -> {
@@ -243,21 +216,11 @@ public class SunsetSunriseMain extends AppCompatActivity {
                                                 items.add(newItem);
                                             });
 
-                                            // Update the RecyclerView
                                             adapter.notifyDataSetChanged();
-
-                                            // Pass the search results to the fragment
-                                            SunsetSunriseFragment fragment = new SunsetSunriseFragment(newItem);
-
-                                            // Use FragmentTransaction to replace the current fragment with the new one
-                                            getSupportFragmentManager().beginTransaction()
-                                                    .replace(R.id.fragmentLocation, fragment)
-                                                    .addToBackStack(null)
-                                                    .commit();
                                         } catch (JSONException e) {
                                             throw new RuntimeException(e);
                                         }
-                                    }, (error) -> {
+                                    }, error -> {
                                 int i = 0;
                             });
 
@@ -266,17 +229,8 @@ public class SunsetSunriseMain extends AppCompatActivity {
                         } catch (UnsupportedEncodingException e) {
                             throw new RuntimeException(e);
                         }
-
-                        SunsetSunriseFragment newFragment = new SunsetSunriseFragment(newSelected);
-                        // Load fragments
-                        FragmentManager fMgr = getSupportFragmentManager();
-                        FragmentTransaction tx = fMgr.beginTransaction();
-                        tx.addToBackStack("back to recycle view");
-                        tx.add(R.id.fragmentLocation, newFragment);
-                        tx.commit(); // Load the fragment
                     });
                 },
-                // Long click listener
                 this::onItemLongClick);
 
         recyclerView.setAdapter(adapter);

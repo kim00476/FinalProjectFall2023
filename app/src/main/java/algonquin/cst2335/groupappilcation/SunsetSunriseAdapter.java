@@ -16,31 +16,23 @@ public class SunsetSunriseAdapter extends RecyclerView.Adapter<SunsetSunriseAdap
     private OnItemClickListener clickListener;
     private OnItemLongClickListener longClickListener;
 
-    // Constructor to initialize the adapter with data and click listeners
     public SunsetSunriseAdapter(List<SunsetSunriseItem> items, OnItemClickListener clickListener, OnItemLongClickListener longClickListener) {
         this.items = items;
         this.clickListener = clickListener;
         this.longClickListener = longClickListener;
     }
 
-    // Method to update the data set when needed
-    public void setItems(List<SunsetSunriseItem> items) {
-        this.items = items;
-        notifyDataSetChanged();
-    }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.coordinate_item, parent, false);
-        return new ViewHolder(view, clickListener, longClickListener);
+        return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         SunsetSunriseItem item = items.get(position);
-        holder.latitudeText.setText(item.getLatitude());
-        holder.longitudeText.setText(item.getLongitude());
+        holder.bind(item);
     }
 
     @Override
@@ -48,40 +40,40 @@ public class SunsetSunriseAdapter extends RecyclerView.Adapter<SunsetSunriseAdap
         return items.size();
     }
 
-    // ViewHolder class with click listeners
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView latitudeText;
-        TextView longitudeText;
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
 
-        public ViewHolder(@NonNull View itemView, OnItemClickListener clickListener, OnItemLongClickListener longClickListener) {
+    public interface OnItemLongClickListener {
+        void onItemLongClick(int position);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        private TextView latitudeTextView;
+        private TextView longitudeTextView;
+
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            latitudeText = itemView.findViewById(R.id.latitudeTextView);
-            longitudeText = itemView.findViewById(R.id.longitudeTextView);
+            latitudeTextView = itemView.findViewById(R.id.latitudeTextView);
+            longitudeTextView = itemView.findViewById(R.id.longitudeTextView);
 
-            // Set the short click listener on the itemView
-            itemView.setOnClickListener(view -> {
+            itemView.setOnClickListener(v -> {
                 if (clickListener != null) {
                     clickListener.onItemClick(getAdapterPosition());
                 }
             });
 
-            // Set the long click listener on the itemView
-            itemView.setOnLongClickListener(view -> {
+            itemView.setOnLongClickListener(v -> {
                 if (longClickListener != null) {
                     longClickListener.onItemLongClick(getAdapterPosition());
                 }
                 return true;
             });
         }
-    }
 
-    // Interface for short click listener
-    public interface OnItemClickListener {
-        void onItemClick(int position);
-    }
-
-    // Interface for long click listener
-    public interface OnItemLongClickListener {
-        void onItemLongClick(int position);
+        public void bind(SunsetSunriseItem item) {
+            latitudeTextView.setText("Latitude: " + item.getLatitude());
+            longitudeTextView.setText("Longitude: " + item.getLongitude());
+        }
     }
 }
