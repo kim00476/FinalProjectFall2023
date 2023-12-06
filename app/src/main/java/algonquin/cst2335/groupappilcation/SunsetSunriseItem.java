@@ -40,4 +40,17 @@ public class SunsetSunriseItem {
     public String getLongitude() {
         return longitude;
     }
+
+    public String getSunrise() {
+        return sunrise;
+    }
+
+    public String getSunset() {
+        return sunset;
+    }
+
+    public String getDate() {
+        return date;
+    }
 }
+

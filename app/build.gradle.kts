@@ -8,6 +8,7 @@ android {
 
     buildFeatures{
         viewBinding = true
+        dataBinding = true
     }
 
 
@@ -36,6 +37,7 @@ android {
 
 dependencies {
     implementation ("com.android.volley:volley:1.2.1")
+    implementation("androidx.databinding:databinding-runtime:8.2.0")
     val room_version = "2.6.0"
     implementation ("androidx.room:room-runtime:$room_version")
     annotationProcessor ("androidx.room:room-compiler:$room_version")
