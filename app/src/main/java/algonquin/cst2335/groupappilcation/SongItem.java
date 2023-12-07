@@ -8,39 +8,39 @@ import androidx.room.PrimaryKey;
 public class SongItem {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    public long id;
-    @ColumnInfo(name = "artistName")
-    protected String name;
-    @ColumnInfo(name = "songTitle")
-    protected String songTitle;
-    @ColumnInfo(name = "albumImage")
-    protected String albumImage;
-    @ColumnInfo(name = "CheckBox")
-    protected boolean isCheckBox;
-    @ColumnInfo(name = "Save")
-    protected boolean isSaveButton;
-    @ColumnInfo(name = "Delete")
-    protected boolean isDeleteButton;
+    long id;
 
-    public SongItem(String songTitle, String albumImage, boolean isCheckBox,
-                    boolean isSaveButton, boolean isDeleteButton) {
+    @ColumnInfo(name = "artistName")
+    String name;
+    @ColumnInfo(name = "songTitle")
+    String songTitle;
+    @ColumnInfo(name = "duration")
+    int duration;
+    @ColumnInfo(name = "albumImage")
+    String albumImage;
+
+    SongItem(String name, String songTitle, int duration, String albumImage){
+        this.name = name;
         this.songTitle = songTitle;
+        this.duration = duration;
         this.albumImage = albumImage;
-        this.isCheckBox = isCheckBox;
-        this.isSaveButton = isSaveButton;
-        this.isDeleteButton = isDeleteButton;
-        }
-        public String getSongTitle() {
-            return songTitle;
-        }
-        public String getAlbumImage(){
-            return albumImage;
-        }
-        public boolean isCheckBox(){
-            return isCheckBox;
-        }
-        public boolean isSaveButton(){
-            return isSaveButton;
-        }
-        public boolean isDeleteButton() {return isDeleteButton;}
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getSongTitle() {
+        return songTitle;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public String getAlbumImage() {
+        return albumImage;
+    }
+
+
+}

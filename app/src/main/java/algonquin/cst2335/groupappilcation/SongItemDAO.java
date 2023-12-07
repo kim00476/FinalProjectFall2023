@@ -11,10 +11,12 @@ public interface SongItemDAO {
     @Insert
     long insertSong(SongItem m);
 
-//    @Query(" Select * from SongItem where songTitle = :selectedWord ")
     @Query(" Select * from SongItem ")
-//    List<SongItem> getItemByWord(String selectedWord);
-    List<SongItem> getAllMessages();
+    List<SongItem> getAllSongs();
+
+    @Query("Select * from SongItem WHERE artistName = :songName AND songTitle = :songAlbum")
+    SongItem searchSongByName(String songName, String songAlbum);
+
     @Delete
     void deleteSong(SongItem m);
 }
