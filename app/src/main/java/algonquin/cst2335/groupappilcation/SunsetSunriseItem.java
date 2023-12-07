@@ -53,4 +53,3 @@ public class SunsetSunriseItem {
         return date;
     }
 }
-

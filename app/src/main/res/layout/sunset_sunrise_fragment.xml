@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
-        android:text="Sunrise"
+        android:name="Sunrise"
         android:textSize="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Sunset"
+        android:name="Sunset"
         android:textSize="20dp"
         app:layout_constraintStart_toStartOf="@+id/sunriseResult"
         app:layout_constraintTop_toBottomOf="@+id/sunriseResult" />
@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Latitude"
+        android:name="Latitude"
         android:textSize="20dp"
         app:layout_constraintStart_toStartOf="@+id/sunsetResult"
         app:layout_constraintTop_toBottomOf="@+id/sunsetResult" />
@@ -43,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Longitude"
+        android:name="Longitude"
         android:textSize="20dp"
         app:layout_constraintStart_toStartOf="@+id/latitude"
         app:layout_constraintTop_toBottomOf="@+id/latitude" />
@@ -53,7 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Date"
+        android:name="Date"
         android:textSize="20dp"
         app:layout_constraintStart_toStartOf="@+id/longitude"
         app:layout_constraintTop_toBottomOf="@+id/longitude" />
@@ -62,7 +62,7 @@
         android:id="@+id/saveButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save Location"
+        android:text="@string/save_location"
         android:layout_marginTop="32dp"
         app:layout_constraintStart_toStartOf="@+id/date"
         app:layout_constraintTop_toBottomOf="@+id/date" />

@@ -1,5 +1,7 @@
 package algonquin.cst2335.groupappilcation;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -19,8 +22,8 @@ public class SunsetSunriseFragment extends Fragment {
     private SunsetSunriseItem result;
     private SunsetSunriseItemDAO iDao;
 
-    public SunsetSunriseFragment(SunsetSunriseItem toDisplay, SunsetSunriseItemDAO iDao) {
-        result = toDisplay;
+    public SunsetSunriseFragment(SunsetSunriseItem result, SunsetSunriseItemDAO iDao) {
+        this.result = result;
         this.iDao = iDao;
     }
 
@@ -36,27 +39,48 @@ public class SunsetSunriseFragment extends Fragment {
         TextView sunsetResultTextView = view.findViewById(R.id.sunsetResult);
         TextView dateTextView = view.findViewById(R.id.date);
 
-        latitudeTextView.setText("Latitude: " + result.getLatitude());
-        longitudeTextView.setText("Longitude: " + result.getLongitude());
-        sunriseResultTextView.setText("Sunrise Time: " + result.getSunrise());
-        sunsetResultTextView.setText("Sunset Time: " + result.getSunset());
-        dateTextView.setText("Date: " + result.getDate());
+        latitudeTextView.setText(String.format("%s%s", getString(R.string.latitude), result.getLatitude()));
+        longitudeTextView.setText(String.format("%s%s", getString(R.string.longitude), result.getLongitude()));
+        sunriseResultTextView.setText(String.format("%s%s",getString(R.string.sunrise), result.getSunrise()));
+        sunsetResultTextView.setText(String.format("%s%s", getString(R.string.sunset), result.getSunset()));
+        dateTextView.setText(String.format("%s%s", getString(R.string.date), result.getDate()));
 
-        Button saveButton = view.findViewById(R.id.saveButton);
-        saveButton.setOnClickListener(v -> onSaveButtonClick());
-
+        Button addButton = view.findViewById(R.id.saveButton);
+        addButton.setOnClickListener(v -> {
+            // Save the result and refresh the result
+            saveResultAndRefresh();
+        });
         return view;
     }
 
-    private void onSaveButtonClick() {
+    private void saveResultAndRefresh() {
         Executor thread = Executors.newSingleThreadExecutor();
         thread.execute(() -> {
-            iDao.insertItem(result);
+            // Check if the item already exists in the database
+            List<SunsetSunriseItem> existingItems = iDao.getAllCoordinates();
+            boolean itemExists = false;
 
+            for (SunsetSunriseItem existingItem : existingItems) {
+                if (existingItem.getLatitude().equals(result.getLatitude()) &&
+                        existingItem.getLongitude().equals(result.getLongitude())) {
+                    itemExists = true;
+                    break;
+                }
+            }
+
+            // Insert the item only if it does not already exist
+            if (!itemExists) {
+                iDao.insertItem(result);
+            }
         });
 
+        // Set the result code to indicate success
+        requireActivity().setResult(Activity.RESULT_OK);
 
+        // Close the current activity (fragment) and return to the previous one
+        requireActivity().finish();
 
-        requireActivity().getSupportFragmentManager().popBackStack();
+        Intent intent = new Intent(requireContext(),SunsetSunriseMain.class);
+        startActivity(intent);
     }
 }
