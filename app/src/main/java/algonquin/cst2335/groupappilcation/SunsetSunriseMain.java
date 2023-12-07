@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,6 +35,7 @@ import algonquin.cst2335.groupappilcation.Data.SunsetSunriseModel;
 import algonquin.cst2335.groupappilcation.databinding.ActivitySunsetSunriseMainBinding;
 
 public class SunsetSunriseMain extends AppCompatActivity {
+
     ActivitySunsetSunriseMainBinding binding;
     SunsetSunriseAdapter adapter;
     RequestQueue queue = null;
@@ -61,40 +63,7 @@ public class SunsetSunriseMain extends AppCompatActivity {
             editor.apply();
 
             if (isValidLocation(inputLatitude, inputLongitude)) {
-                try {
-                    String latitude = URLEncoder.encode(inputLatitude, "UTF-8");
-                    String longitude = URLEncoder.encode(inputLongitude, "UTF-8");
-
-                    String url = "https://api.sunrisesunset.io/json?lat=" + latitude + "&lng=" + longitude + "&timezone=CA&date=today";
-
-                    JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                            (response) -> {
-                                try {
-                                    JSONObject mainObj = response.getJSONObject("results");
-                                    String sunrise = mainObj.getString("sunrise");
-                                    String sunset = mainObj.getString("sunset");
-                                    String date = mainObj.getString("date");
-
-                                    SunsetSunriseItem newItem = new SunsetSunriseItem(latitude, longitude, sunrise, sunset, date);
-
-                                    SunsetSunriseFragment fragment = new SunsetSunriseFragment(newItem, iDao);
-
-                                    getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.fragmentLocation, fragment)
-                                            .addToBackStack(null)
-                                            .commit();
-
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }, (error) -> {
-                    });
-
-                    queue.add(request);
-
-                } catch (UnsupportedEncodingException e) {
-                    throw new RuntimeException(e);
-                }
+                searchCoordinates(inputLatitude, inputLongitude);
             } else {
                 Toast.makeText(this, "Invalid location. Please enter valid latitude and longitude.", Toast.LENGTH_LONG).show();
             }
@@ -110,11 +79,19 @@ public class SunsetSunriseMain extends AppCompatActivity {
         SunsetSunriseDatabase db = Room.databaseBuilder(getApplicationContext(), SunsetSunriseDatabase.class, "sun-db")
                 .build();
         iDao = db.isDAO();
+        getItem();
+    }
+
+    private void getItem() {
 
         Executor thread1 = Executors.newSingleThreadExecutor();
         thread1.execute(() -> {
             List<SunsetSunriseItem> fromDatabase = iDao.getAllCoordinates();
+            items.clear(); // Clear existing items
             items.addAll(fromDatabase);
+
+            // Notify the adapter on the main thread
+            runOnUiThread(() -> adapter.notifyDataSetChanged());
         });
     }
 
@@ -128,13 +105,12 @@ public class SunsetSunriseMain extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.delete_item:
-                Snackbar.make(binding.SunsetSunriseToolbar, "Confirm deletion?", Snackbar.LENGTH_LONG).show();
+            case R.id.home_item:
+                homeAlert();
                 break;
 
             case R.id.about_item:
-                Toast.makeText(this, "Version 1.0, created by Yuyao He", Toast.LENGTH_LONG).show();
-                break;
+                Toast.makeText(this,"Version 1.0, created by Yuyao He", Toast.LENGTH_LONG).show();
 
             case R.id.howToUse_item:
                 instructionAlert();
@@ -142,8 +118,36 @@ public class SunsetSunriseMain extends AppCompatActivity {
         return true;
     }
 
+    private void homeAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirm Exit")
+                .setMessage("Are you sure you want to exit?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    // User confirmed, close the main activity
+                    finish();
+                })
+                .setNegativeButton("No", (dialog, which) -> {
+                    // User canceled, do nothing
+                })
+                .show();
+    }
+
+
     private void instructionAlert() {
-        // Needs to be done
+        String howto1 = getString(R.string.how_to_look_up_location1);
+        String howto2 = getString(R.string.how_to_look_up_location2);
+        String howto3 = getString(R.string.how_to_look_up_location3);
+        String howto4 = getString(R.string.how_to_look_up_location4);
+
+        String appInstruction = howto1 + "\n" + howto2 + "\n" + howto3 + "\n" + howto4;
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(appInstruction)
+                .setTitle("How to use this?")
+                .setNegativeButton("OK", (dialog, cl) -> {
+                })
+                .create().show();
     }
 
     public boolean isValidLocation(String inputLatitude, String inputLongitude) {
@@ -156,14 +160,34 @@ public class SunsetSunriseMain extends AppCompatActivity {
     private void onItemLongClick(int position) {
         SunsetSunriseItem selectedItem = items.get(position);
 
-        Executor thread = Executors.newSingleThreadExecutor();
-        thread.execute(() -> iDao.deleteItem(selectedItem));
-
-        items.remove(position);
-        adapter.notifyDataSetChanged();
-
-        Toast.makeText(this, "Item deleted", Toast.LENGTH_SHORT).show();
+        // Show a confirmation dialog before deleting the item
+        showDeleteConfirmationDialog(selectedItem, position);
     }
+
+    private void showDeleteConfirmationDialog(SunsetSunriseItem selectedItem, int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirm Deletion")
+                .setMessage("Are you sure you want to delete this item?")
+                .setPositiveButton("Delete", (dialog, which) -> {
+                    // User confirmed, delete the item
+                    deleteItem(selectedItem, position);
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> {
+                    // User canceled, do nothing
+                })
+                .show();
+    }
+        private void deleteItem(SunsetSunriseItem selectedItem, int position) {
+            Executor thread = Executors.newSingleThreadExecutor();
+            thread.execute(() -> {
+                iDao.deleteItem(selectedItem);
+            });
+
+            items.remove(position);
+            adapter.notifyDataSetChanged();
+
+            Snackbar.make(this.getCurrentFocus(), "Item deleted", Toast.LENGTH_SHORT).show();
+        }
 
     private void setupSharedPreferences() {
         SharedPreferences prefs = getSharedPreferences("MyLocationData", Context.MODE_PRIVATE);
@@ -186,53 +210,60 @@ public class SunsetSunriseMain extends AppCompatActivity {
         RecyclerView recyclerView = binding.sunsetSunriseRecycleView;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new SunsetSunriseAdapter(items,
-                position -> {
-                    SunsetSunriseItem selectedItem = items.get(position);
-                    itemModel.selected.observe(this, newSelected -> {
-                        String latitude;
-                        String longitude;
+        // Initialize the adapter with the items
+        adapter = new SunsetSunriseAdapter(items);
 
-                        try {
-                            latitude = URLEncoder.encode(selectedItem.getLatitude(), "UTF-8");
-                            longitude = URLEncoder.encode(selectedItem.getLongitude(), "UTF-8");
-
-                            String url = "https://api.sunrisesunset.io/json?lat=" + latitude + "&lng=" + longitude + "&timezone=CA&date=today";
-
-                            String finalLatitude = latitude;
-                            String finalLongitude = longitude;
-                            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                                    response -> {
-                                        try {
-                                            JSONObject mainObj = response.getJSONObject("results");
-                                            String sunrise = mainObj.getString("sunrise");
-                                            String sunset = mainObj.getString("sunset");
-                                            String date = mainObj.getString("date");
-
-                                            SunsetSunriseItem newItem = new SunsetSunriseItem(finalLatitude, finalLongitude, sunrise, sunset, date);
-                                            Executor thread = Executors.newSingleThreadExecutor();
-                                            thread.execute(() -> {
-                                                iDao.insertItem(newItem);
-                                                items.add(newItem);
-                                            });
-
-                                            adapter.notifyDataSetChanged();
-                                        } catch (JSONException e) {
-                                            throw new RuntimeException(e);
-                                        }
-                                    }, error -> {
-                                int i = 0;
-                            });
-
-                            queue.add(request);
-
-                        } catch (UnsupportedEncodingException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
-                },
-                this::onItemLongClick);
+        // Set the item click and long click listeners
+        adapter.setOnItemClickListener((latitude, longitude) -> {
+            // Perform a new search using the coordinates
+            searchCoordinates(latitude, longitude);
+        });
+        adapter.setOnItemLongClickListener(position -> {
+            // Perform deletion after confirming with a pop-up warning
+            onItemLongClick(position);
+        });
 
         recyclerView.setAdapter(adapter);
     }
+
+    private void searchCoordinates(String latitude, String longitude) {
+        try {
+            latitude = URLEncoder.encode(latitude, "UTF-8");
+            longitude = URLEncoder.encode(longitude, "UTF-8");
+
+            String url = "https://api.sunrisesunset.io/json?lat=" + latitude + "&lng=" + longitude + "&timezone=CA&date=today";
+
+            String finalLatitude = latitude;
+            String finalLongitude = longitude;
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                    response -> {
+                        try {
+                            JSONObject mainObj = response.getJSONObject("results");
+                            String sunrise = mainObj.getString("sunrise");
+                            String sunset = mainObj.getString("sunset");
+                            String date = mainObj.getString("date");
+
+                            SunsetSunriseItem newItem = new SunsetSunriseItem(finalLatitude, finalLongitude, sunrise, sunset, date);
+
+                            SunsetSunriseFragment fragment = new SunsetSunriseFragment(newItem, iDao);
+                            getSupportFragmentManager().beginTransaction()
+                                    .addToBackStack(null)  // Add the fragment to the back stack
+                                    .replace(R.id.fragmentLocation, fragment)
+                                    .commit();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(this, "Error parsing JSON response", Toast.LENGTH_SHORT).show();
+                        }
+                    }, (error) -> {
+                Toast.makeText(this, "Network request failed", Toast.LENGTH_SHORT).show();
+            });
+
+            queue.add(request);
+
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
+

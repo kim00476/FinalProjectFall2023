@@ -13,13 +13,11 @@ import java.util.List;
 public class SunsetSunriseAdapter extends RecyclerView.Adapter<SunsetSunriseAdapter.ViewHolder> {
 
     private List<SunsetSunriseItem> items;
-    private OnItemClickListener clickListener;
-    private OnItemLongClickListener longClickListener;
+    private OnItemClickListener onItemClickListener;
+    private OnItemLongClickListener onItemLongClickListener;
 
-    public SunsetSunriseAdapter(List<SunsetSunriseItem> items, OnItemClickListener clickListener, OnItemLongClickListener longClickListener) {
+    public SunsetSunriseAdapter(List<SunsetSunriseItem> items) {
         this.items = items;
-        this.clickListener = clickListener;
-        this.longClickListener = longClickListener;
     }
 
     @NonNull
@@ -40,8 +38,16 @@ public class SunsetSunriseAdapter extends RecyclerView.Adapter<SunsetSunriseAdap
         return items.size();
     }
 
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener listener) {
+        this.onItemLongClickListener = listener;
+    }
+
     public interface OnItemClickListener {
-        void onItemClick(int position);
+        void onItemClick(String latitude, String longitude);
     }
 
     public interface OnItemLongClickListener {
@@ -57,17 +63,22 @@ public class SunsetSunriseAdapter extends RecyclerView.Adapter<SunsetSunriseAdap
             latitudeTextView = itemView.findViewById(R.id.latitudeTextView);
             longitudeTextView = itemView.findViewById(R.id.longitudeTextView);
 
+            // Set click and long click listeners
             itemView.setOnClickListener(v -> {
-                if (clickListener != null) {
-                    clickListener.onItemClick(getAdapterPosition());
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && onItemClickListener != null) {
+                    SunsetSunriseItem clickedItem = items.get(position);
+                    onItemClickListener.onItemClick(clickedItem.getLatitude(), clickedItem.getLongitude());
                 }
             });
 
             itemView.setOnLongClickListener(v -> {
-                if (longClickListener != null) {
-                    longClickListener.onItemLongClick(getAdapterPosition());
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && onItemLongClickListener != null) {
+                    onItemLongClickListener.onItemLongClick(position);
+                    return true;
                 }
-                return true;
+                return false;
             });
         }
 
