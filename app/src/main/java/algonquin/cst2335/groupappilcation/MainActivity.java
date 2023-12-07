@@ -51,22 +51,22 @@ public class MainActivity extends AppCompatActivity {
 
             Snackbar.make(binding.songButton, "Click this button", Snackbar.LENGTH_LONG).show();
 
-//            AlertDialog.Builder ad = new AlertDialog.Builder(MainActivity.this);
-//            ad.setMessage("Do you still want to search the song?")
-//              .setTitle("Question")
-//
-//              .setNegativeButton("No", (dialog, cl) -> {
-//                  Toast.makeText(this, "You clicked No.", Toast.LENGTH_LONG).show();
-//                    })
-//
-//              .setPositiveButton("Yes", (dialog, cl) -> {
-//                  Snackbar.make(binding.songButton, "Go to song search", Snackbar.LENGTH_LONG)
-//                          .setAction("GO", clk -> {
-//                              Log.d("SnackbarAction", "Snackbar Action Clicked!");
-//                              startActivity(new Intent(MainActivity.this, SongSearchMain.class));
-//                          })
-//                          .show();
-//                    }).create().show();
+            AlertDialog.Builder ad = new AlertDialog.Builder(MainActivity.this);
+            ad.setMessage("Do you still want to search the song?")
+              .setTitle("Question")
+
+              .setNegativeButton("No", (dialog, cl) -> {
+                  Toast.makeText(this, "You clicked No.", Toast.LENGTH_LONG).show();
+                    })
+
+              .setPositiveButton("Yes", (dialog, cl) -> {
+                  Snackbar.make(binding.songButton, "Go to song search", Snackbar.LENGTH_LONG)
+                          .setAction("GO", clk -> {
+                              Log.d("SnackbarAction", "Snackbar Action Clicked!");
+                              startActivity(new Intent(MainActivity.this, SongSearchMain.class));
+                          })
+                          .show();
+                    }).create().show();
 
         });
     }

@@ -1,12 +1,11 @@
 package algonquin.cst2335.groupappilcation;
 
-import static android.os.Build.VERSION_CODES.R;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -38,8 +37,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -151,10 +148,6 @@ public class SongSearchMain extends AppCompatActivity {
         search.setText(searchField);
 
 
-//        getSupportFragmentManager().beginTransaction()
-//                .replace(R.id.toolbar_container, new DeezerToolbarFragment())
-//            .commit();
-
         searchBtn.setOnClickListener( clk -> {
             String searchAuthor = getString(R.string.searchArtistName);
             Toast.makeText(SongSearchMain.this, searchAuthor, Toast.LENGTH_SHORT).show();
@@ -166,9 +159,8 @@ public class SongSearchMain extends AppCompatActivity {
             songItems.clear();
             myAdapter.notifyDataSetChanged();
 
-//        setSupportActionBar(binding.SongToolbar);
-//
-//        setContentView(binding.getRoot());
+        setSupportActionBar(binding.SongToolbar);
+
 
             thread = Executors.newSingleThreadExecutor();
 
@@ -198,13 +190,13 @@ public class SongSearchMain extends AppCompatActivity {
                                                         String name = contributeObj.getString("name");
 //                                          String albumImage = albumData.getJSONObject(j).getString("picture_small");
 
-                                                        String imageUrl = "https://e-cdns-images.dzcdn.net/images/artist/" + album + ".jpg";
+                                                       // String imageUrl = "https://e-cdns-images.dzcdn.net/images/artist/" + album + ".jpg";
                                                         String pathname = getFilesDir() + "/" + album + ".jpg";
                                                         File file = new File(pathname);
-                                                        if (file.exists()) {
-                                                            mBinding.albumImage.setImageBitmap(BitmapFactory.decodeFile(pathname));
+                                                       if (file.exists()) {
+//                                                            mBinding.albumImage.setImageBitmap(BitmapFactory.decodeFile(pathname));
                                                         } else {
-                                                            ImageRequest imgReq = new ImageRequest(imageUrl,
+                                                            ImageRequest imgReq = new ImageRequest(album,
                                                                     (Response.Listener<Bitmap>) bitmap -> {
                                                                         FileOutputStream fOut = null;
                                                                         try {
@@ -228,18 +220,27 @@ public class SongSearchMain extends AppCompatActivity {
                                                         songItems.add(new SongItem(name, title,duration, album));
                                                     }
                                                 }
+
+
                                             } catch (JSONException e) {
+                                                int k = 0;
                                                 throw new RuntimeException(e);
                                             }
+
                                         },
                                         (songError) -> {
                                         });
                                 queue.add(songLookup);
-                                runOnUiThread(() -> {
-                                    myAdapter.notifyDataSetChanged();
-                                });
+
                             }
+
+                            runOnUiThread(() -> {
+                                myAdapter.notifyDataSetChanged();
+                            });
                         } catch (JSONException e) {
+                            String m  = e.getMessage();
+                            Log.d("Hi", m);
+                            int i = 0;
                             throw new RuntimeException(e);
                         }
                     },
@@ -248,7 +249,7 @@ public class SongSearchMain extends AppCompatActivity {
                     }));
             queue.add(request);
         });//click search button listener end
-    };
+    }
 
 //    String artist = binding.artistName.getText().toString();
 //    String stringUrl = "";
@@ -308,6 +309,8 @@ public class SongSearchMain extends AppCompatActivity {
 //            queue.add(request);
 //});
 //        }
+
+
     private class MyHolder extends RecyclerView.ViewHolder {
         TextView songName;
         TextView albumName;

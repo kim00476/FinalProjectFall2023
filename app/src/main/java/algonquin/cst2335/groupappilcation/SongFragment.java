@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.room.Room;
 
+import com.squareup.picasso.Picasso;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -61,6 +62,12 @@ public class SongFragment extends Fragment implements View.OnClickListener{
         mBinding.favButton.setOnClickListener(this);
         return mBinding.getRoot();
     }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        super.onCreateOptionsMenu(menu);
+//        getMenuInflater().inflate(R.menu.song_menu, menu);
+//        return true;
+//    }
 
     @Override
     public void onClick(View v) {
