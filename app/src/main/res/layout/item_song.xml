@@ -1,52 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="8dp">
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <Button
+        android:id="@+id/favButton2"
         android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:onClick="deleteAllSong"
+        android:text="Delete All Song List"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/titleView"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:text="Title: "
+        android:textSize="16dp"
+        app:layout_constraintStart_toEndOf="@+id/albumImage"
+        app:layout_constraintTop_toTopOf="@+id/albumImage" />
+
+    <TextView
+        android:id="@+id/durationView"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:text="Duration: "
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="@+id/titleView"
+        app:layout_constraintTop_toBottomOf="@+id/titleView" />
+
+    <TextView
+        android:id="@+id/albumNameView"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:text="Album Name: "
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="@+id/durationView"
+        app:layout_constraintTop_toBottomOf="@+id/durationView" />
+
+    <ImageView
+        android:id="@+id/albumImage"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
 
-        <ImageView
-            android:id="@+id/itemAlbumImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/deleteCheckBox"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars"/>
+    <Button
+        android:id="@+id/removeButton"
+        android:layout_width="105dp"
+        android:layout_height="48dp"
+        android:onClick="goToFavoriteSong"
+        android:text="REMOVE"
+        app:layout_constraintBottom_toBottomOf="@+id/albumImage"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <TextView
-            android:id="@+id/songList"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Title"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            app:layout_constraintStart_toEndOf="@+id/itemAlbumImage"
-            app:layout_constraintTop_toTopOf="@+id/itemAlbumImage" />
-
-        <CheckBox
-            android:id="@+id/deleteCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/itemAlbumImage" />
-
-        <Button
-            android:id="@+id/deleteBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="SAVE"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
