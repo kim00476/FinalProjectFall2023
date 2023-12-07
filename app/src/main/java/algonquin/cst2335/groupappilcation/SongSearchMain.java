@@ -1,222 +1,140 @@
 package algonquin.cst2335.groupappilcation;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.Response;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
+import algonquin.cst2335.groupappilcation.Data.SongViewModel;
+import algonquin.cst2335.groupappilcation.databinding.ActivitySongRoomBinding;
 import algonquin.cst2335.groupappilcation.databinding.ActivitySongSearchMainBinding;
-
+import algonquin.cst2335.groupappilcation.databinding.SongListBinding;
 
 public class SongSearchMain extends AppCompatActivity {
-    private ActivitySongSearchMainBinding binding;
-    private EditText search;
-    private SharedPreferences sharedPreferences;
-    private SongSearchItemDAO songDao;
-
-    private RequestQueue queue;
-
-    private String artistName;
-
-    private RecyclerView recyclerView;
-
-    private RequestQueue requestQueue;
-
-    ArrayList<SongSearchItem> favList = new ArrayList<SongSearchItem>();
-
+    public SongViewModel mainViewModel;
+    public ActivitySongSearchMainBinding songSearchMainBinding;
+    public ActivitySongRoomBinding songRoomBinding;
+    public SongListBinding songListBinding;
+//    public RecyclerView.Adapter<SongRoom.MyRowHolder> songAdaper;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        sharedPreferences();
-        connectionDatabase();
+        mainViewModel = new ViewModelProvider(this).get(SongViewModel.class);
 
-        queue = Volley.newRequestQueue(this);
+        songSearchMainBinding = ActivitySongSearchMainBinding.inflate(getLayoutInflater());
+        setContentView(songSearchMainBinding.getRoot());
 
-        binding = ActivitySongSearchMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        setSupportActionBar(binding.SongToolbar);
-
-        sharedPreferences = getSharedPreferences("SongData", Context.MODE_PRIVATE);
-        String value = sharedPreferences.getString("song", "");
-        binding.editText.setText(value);
-
-//        recyclerView = findViewById(R.id.song_recycleView); //initialize RecyclerView
-//        recyclerView.setHasFixedSize(true);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-         // main and should out of button
-        binding.searchButton.setOnClickListener(click -> {
-
-//            try {
+//        songListBinding = SongListBinding.inflate(getLayoutInflater());
 //
-//
-//                artistName = binding.editText.getText().toString();
-//
-//                String stringUrl = "https://api.deezer.com/search/artist/?q="
-//                        + URLEncoder.encode(artistName, "UTF-8");
-//
-//                // Clear dataList before adding new items
-//
-//                Log.d("SongSearchMain", "URL: " + stringUrl);
-//                JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, stringUrl, null,
-//                        (response) -> {
-//                            try {
-//                                JSONArray results = response.getJSONArray("data");
-//                                JSONObject position0 = results.getJSONObject(0);
-//                                for (int i = 0; i < results.length(); i++) {
-//                                    JSONObject anAlbum = results.getJSONObject(i);
-//                                    String tracklist = anAlbum.getString("tracklist");
-//                                    JsonObjectRequest songLookup =
-//                                            new JsonObjectRequest(Request.Method.GET, tracklist, null,
-//                                            (songRequest) -> {
-//                                                try {
-//                                                    JSONArray albumData = songRequest.getJSONArray("data");
-//
-//                                                    for (int j = 0; j < albumData.length(); j++)
-//                                                    {
-//                                                        JSONObject thisAlbum = albumData.getJSONObject(j);
-//                                                        String title = thisAlbum.getString("title");
-//                                                        int duration = thisAlbum.getInt("duration");
-//                                                        String album = anAlbum.getString("picture_small");
-//                                                        String name = anAlbum.getString("name");
-//
-//                                                        runOnUiThread(()->{
-//                                                            binding.textView.setText("Title" +title);
-//                                                            binding.textView.setVisibility(View.VISIBLE);
-//
-//
-//
-//                                                        });
-//                                                    }
-//                                                } catch (JSONException e) {
-//                                                    throw new RuntimeException(e);
-//                                                }
-//                                            },
-//                                            (songError) -> {     });
-//
-//                                    queue.add(songLookup);
-//                                }
-//                            } catch (JSONException e) {
-//                                throw new RuntimeException(e);
-//                            }
-//                        },
-//                        (error) -> {
-//                            error.printStackTrace();
-//                        });
-//            } catch (UnsupportedEncodingException e) {
-//                throw new RuntimeException(e);
-//            }
-        });//click listener last
-    }//onCreate last
+//        songRoomBinding = ActivitySongRoomBinding.inflate(getLayoutInflater());
+//        setContentView(songRoomBinding.getRoot());
 
-    private void connectionDatabase() {
+        TextView mainTextView = songSearchMainBinding.textView;
+        EditText mainEditText = songSearchMainBinding.artistName;
+        Button searchBtn = songSearchMainBinding.searchButton;
+        CheckBox checkBox = songListBinding.itemCheckBox;
+        Button saveBtn = songListBinding.saveBtn;
 
-        SongDatabase database = Room.databaseBuilder(getApplicationContext(), SongDatabase.class, "Song_db")
-                .fallbackToDestructiveMigration() // Schema DB version
-                .allowMainThreadQueries()         // Main Thread DB : IO
-                .build();
+        songSearchMainBinding.artistName.setText(mainViewModel.editString);
+        searchBtn.setOnClickListener((click ->
+        {
+            String editString = mainEditText.getText().toString();
+            mainViewModel.editString.postValue(editString);
 
-        songDao = database.songDAO(); // interface
-    } //connectionDatabase last
+            artistName = songSearchMainBinding.artistName.getText().toString();
+            String stringUrl = "https://api.deezer.com/search/artist/?q=" + artistName;
 
-    private void buildToolbar() {
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, stringUrl,null,
+                    (response) -> {
+                try {
+                        JSONArray results = response.getJSONArray("data");
+                        for (int i = 0; i < results.length(); i++) {
+                            JSONObject anAlbum = results.getJSONObject(i);
+                            String tracklist = anAlbum.getString("tracklist");
+                            JsonObjectRequest songLookup =
+                                    new JsonObjectRequest(Request.Method.GET, tracklist, null,
+                                            (songRequest) -> {
+                                                try {
+                                                    JSONArray albumData = songRequest.getJSONArray("data");
+
+                                                    for (int j = 0; j < albumData.length(); j++)
+                                                    {
+                                                        JSONObject thisAlbum = albumData.getJSONObject(j);
+                                                        String title = thisAlbum.getString("title");
+                                                        int duration = thisAlbum.getInt("duration");
+                                                        JSONArray contributors = thisAlbum.getJSONArray("contributors");
+                                                        for(int k = 0; k < contributors.length(); k++){
+                                                            JSONObject contributeObj = contributors.getJSONObject(k);
+                                                            String album = contributeObj.getString("picture_small");
+                                                            String name = contributeObj.getString("name");
+//                                                        String albumImage = albumData.getJSONObject(j).getString("picture_small");
+
+                                                            String imageUrl = "https://e-cdns-images.dzcdn.net/images/artist/" + album + ".jpg";
+                                                            String pathname = getFilesDir() + "/" + album + ".jpg";
+                                                            File file = new File(pathname);
+                                                            if (file.exists()) {
+                                                                mBinding.albumImage.setImageBitmap(BitmapFactory.decodeFile(pathname));
+                                                            }else{
+                                                                ImageRequest imgReq = new ImageRequest(imageUrl,
+                                                                        (Response.Listener<Bitmap>) bitmap -> {
+                                                                            FileOutputStream fOut = null;
+                                                                            try {
+                                                                                fOut = openFileOutput(album + ".jpg", Context.MODE_PRIVATE);
+
+                                                                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                                                                                fOut.flush();
+                                                                                fOut.close();
+                                                                            } catch (
+                                                                                    FileNotFoundException e) {
+                                                                                e.printStackTrace();
+                                                                            } catch (
+                                                                                    IOException e) {
+                                                                                throw new RuntimeException(e);
+                                                                            }
+                                                                            mBinding.albumImage.setImageBitmap(bitmap);
+                                                                        }, 200, 200, ImageView.ScaleType.CENTER, null,
+                                                                        (error) -> {
+
+                                                                        });
+                                                                queue.add(imgReq);
+                                                            }
+                                                            songList.add(new SongItem(title, duration, album, name));
+                                                        }
+
+        }));//click search button listener end
+        songListBinding.itemCheckBox.setOnCheckedChangeListener((btn1, isSelected) ->{
+            mainViewModel.isSelected.postValue(isSelected);
+        });
+
+        mainViewModel.isSelected.observe(this, selected ->{
+            songListBinding.itemCheckBox.setChecked(selected);
+        });
+    }//onCreate end
 
 
-    } //toolbar last
 
-    private void sharedPreferences() {
 
-    }
 
-    private void searchButtonClick() throws UnsupportedEncodingException {
-        SharedPreferences.Editor editor = getSharedPreferences("SongData", Context.MODE_PRIVATE).edit();
-        search = findViewById(R.id.editText);
-        String searched = search.getText().toString();
-        editor.putString("SongSearched", searched);
-        editor.apply();
-    }
-
-    private void showToast() {
-        Toast.makeText(this, "Test", Toast.LENGTH_SHORT).show();
-    }
-
-    private void showAlertDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Test test test")
-                .setMessage("This will be instruction")
-                .setPositiveButton("OK", (dialog, cl) -> {
-                    // close
-                })
-                .show();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (search != null) {
-            sharedPreferences = getSharedPreferences("SongData", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            String value = search.getText().toString();
-            editor.putString("song", value);
-            editor.commit();
-            editor.apply();
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-
-        getMenuInflater().inflate(R.menu.song_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int itemId = item.getItemId();
-
-        if (itemId == R.id.About) {
-            showToast();
-            return true;  // not showing
-        } else if (itemId == R.id.help) {
-            showAlertDialog();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-//    public void addToFavorite(View view) {
-//
-//        String songID = view.getContentDescription().toString();
-////        Song song = songCollection.searchById(songID)
-//        Toast.makeText(this, "button is clicked", Toast.LENGTH_LONG).show();
-//    }
-
-}//main last
+}//class end

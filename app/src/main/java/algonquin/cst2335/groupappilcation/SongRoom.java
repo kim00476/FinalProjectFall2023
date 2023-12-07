@@ -4,108 +4,162 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import algonquin.cst2335.groupappilcation.Data.SongSearchModel;
+import algonquin.cst2335.groupappilcation.Data.SongViewModel;
 import algonquin.cst2335.groupappilcation.databinding.ActivitySongRoomBinding;
-import algonquin.cst2335.groupappilcation.databinding.ItemSongBinding;
+import algonquin.cst2335.groupappilcation.databinding.SongListBinding;
 
 public class SongRoom extends AppCompatActivity {
-    ArrayList<SongSearchItem> songLists; // in the beginning, there are no messages
-    ActivitySongRoomBinding binding;
+    ActivitySongRoomBinding songRoomBinding;
+    SongViewModel songViewModel;
+    ArrayList<SongItem> songItems;
     RecyclerView.Adapter<MyRowHolder> myAdapter;
-    SongSearchModel songModel;
-    SongSearchItemDAO mDao; //Declare the dao here
+    SongItemDAO itemDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivitySongRoomBinding.inflate(getLayoutInflater());
+        songRoomBinding = ActivitySongRoomBinding.inflate(getLayoutInflater());
 
-        songModel = new ViewModelProvider(this).get(SongSearchModel.class);
-        songLists = songModel.songLists.getValue();
+        songViewModel = new ViewModelProvider(this).get(SongViewModel.class);
+        songItems = songViewModel.listSong.getValue();
 
-        SongDatabase db = Room.databaseBuilder(getApplicationContext(), SongDatabase.class, "database-name").build();
+        SongDatabase db = Room.databaseBuilder(getApplicationContext(), SongDatabase.class, "song-title").build();
 
-        mDao = db.songDAO();
+        itemDAO = db.songItemDAO();
 
-        if(songLists == null){
-            songModel.songLists.postValue(songLists = new ArrayList<>());
+        if(songItems == null){
+            songViewModel.listSong.postValue(songItems = new ArrayList<>());
 
-            Executor thread2 = Executors.newSingleThreadExecutor();
-            thread2.execute(() ->
+            Executor thread = Executors.newSingleThreadExecutor();
+            thread.execute(()->
             {
-                songLists.addAll( mDao.getAllSongs() ); //Once you get the data from database
+                songItems.addAll(itemDAO.getAllMessages());
 
-                runOnUiThread( () ->  binding.recycleView.setAdapter( myAdapter )); //You can then load the RecyclerView
+                runOnUiThread(() ->
+                        songRoomBinding.recycleView.setAdapter(myAdapter));
             });
         }
 
-        setContentView(binding.getRoot());
+        setContentView(songRoomBinding.getRoot());
 
-        binding.deleteBtn.setOnClickListener(click ->{
+//        songRoomBinding.deleteBtn.setOnClickListener(cli ->{
+//            //delete the data
+//        });
 
-            myAdapter.notifyDataSetChanged();
-        });
-
-        binding.recycleView.setAdapter(
+        songRoomBinding.recycleView.setAdapter(
                 myAdapter = new RecyclerView.Adapter<MyRowHolder>() {
                     @Override
                     public int getItemViewType(int position){
-                        //determine which layout to load at row position
-
-                        SongSearchItem songList = songLists.get(position);
-                        return songList.isRemoveButton() ? 0 :1;
+                        SongItem songList = songItems.get(position);
+                        return songList.isCheckBox() ? 0: 1;
                     }
-            @NonNull
-            @Override
-            public MyRowHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                ItemSongBinding binding = ItemSongBinding.inflate(getLayoutInflater());
-                return new MyRowHolder(binding.getRoot());
-            }
+                    @NonNull
+                    @Override
+                    public MyRowHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                        SongListBinding songListBinding = SongListBinding.inflate(getLayoutInflater(), parent, false);
+                        return new MyRowHolder(songListBinding.getRoot());
 
-            @Override
-            public void onBindViewHolder(@NonNull MyRowHolder holder, int position) {
-                SongSearchItem songList = songLists.get(position);
+//                        View itemView = LayoutInflater.from(parent.getContext()).inflate(
+//                                viewType == 0 ? R.layout.layout_with_checkbox : R.layout.layout_without_checkbox,
+//                                parent,
+//                                false
+//                        );
+//                        return new MyRowHolder(itemView);
+                    }//onCreateViewHolder
 
-                holder.titleView.setText(songList.getTitle());
-                holder.durationView.setText(songList.getDuration());
-                holder.albumNameView.setText(songList.getPicture_small());
+                    @Override
+                    public void onBindViewHolder(@NonNull MyRowHolder holder, int position) {
+                        SongItem songItem = songItems.get(position);
+                        holder.songTitle.setText(songItem.getSongTitle());
+                        holder.deleteBtn.setOnClickListener(v -> {
+//                            deleteData(songList.getSongTitle());
+                        });
+                        holder.deleteCheckBox.setChecked(songItem.isCheckBox());
+                        holder.deleteCheckBox.setOnCheckedChangeListener(((buttonView, isChecked) -> {
+//                            songItem.setChecked(isChecked);
+                            if (isChecked){
 
-            }
+                            } else {
 
-            @Override
-            public int getItemCount() {
-                return songLists.size();
-            }
-        });
+                            }
+                        }));
+////                holder.albumImage.setImageBitmap(songList.);
+                    }//onBindViewHolder
+                    @Override
+                    public int getItemCount() {
+                        return songItems.size();
+                    }//getItemCount
+                });//setAdaper end
+        songRoomBinding.recycleView.setLayoutManager(new LinearLayoutManager(this));
+    } //onCreat end
 
-    }
-
-    class MyRowHolder extends RecyclerView.ViewHolder {
-        ImageView albumImage;
-        TextView titleView, durationView, albumNameView;
-        Button removeButton;
+    class MyRowHolder extends RecyclerView.ViewHolder{
+        public TextView songTitle;
+        public ImageView albumImage;
+        public CheckBox deleteCheckBox;
+        public Button deleteBtn;
         public MyRowHolder(@NonNull View itemView) {
             super(itemView);
+            itemView.setOnClickListener(clk ->{
+                int position = getAbsoluteAdapterPosition();
+                SongItem sr = songItems.get(position);
+                AlertDialog.Builder builder = new AlertDialog.Builder(SongRoom.this);
+                builder.setMessage("Do you want to delete this message:" + songTitle.getText());
+                builder.setTitle("Question");
+                builder.setNegativeButton("No", (dialog, cl) -> {  });
+                builder.setPositiveButton("Yes", (dialog, cl) -> {
+                    /*is yes is clicked*/
+                    Executor thread1 = Executors.newSingleThreadExecutor();
+                    // this is on a background thread
+                    thread1.execute((  ) -> {
+                        //delete form database
+                        itemDAO.deleteSong(sr); //which chat message to delete?
 
+                    });
+                    songItems.remove(position); //remove form the array list row: 0
+                    myAdapter.notifyDataSetChanged();
+
+                    //give feedback : anything on screen
+                    Snackbar.make(songTitle, "You deleted song #" + position, Snackbar.LENGTH_LONG)
+                            .setAction("Undo", ck -> {
+
+                                Executor thread2 = Executors.newSingleThreadExecutor();
+                                // this is on a background thread
+                                thread2.execute((  ) -> {
+
+                                    itemDAO.insertSong(sr);
+                                });
+                                songItems.add(position,sr);
+                                myAdapter.notifyDataSetChanged();
+                            })
+                            .show();
+                });
+
+                builder.create().show(); // this has to be last
+            });
+            songTitle = itemView.findViewById(R.id.songList);
             albumImage = itemView.findViewById(R.id.albumImage);
-            titleView = itemView.findViewById(R.id.titleView);
-            durationView = itemView.findViewById(R.id.durationView);
-            albumNameView = itemView.findViewById(R.id.albumNameView);
-            removeButton = itemView.findViewById(R.id.removeButton);
+            deleteCheckBox = itemView.findViewById(R.id.deleteCheckBox);
+            deleteBtn = itemView.findViewById(R.id.deleteBtn);
         }
-    }
-}//class
+    }//MyRowHolder end
+} //SongRoom end
