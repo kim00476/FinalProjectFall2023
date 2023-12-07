@@ -14,4 +14,12 @@
     <string name="Duration">지속</string>
     <string name="Album">앨범명</string>
     <string name="app_name">GroupAppilcation</string>
+    <string name="addQuestion">즐겨 찾기에 추가?</string>
+    <string name="addTitle">즐겨 찾기에 추가</string>
+    <string name="confirm">예</string>
+    <string name="favoritesAdded"> 즐겨찾기에 추가됨</string>
+    <string name="songInFavorties">이미 즐겨찾기에 등록된 노래</string>
+    <string name="albumHere">여기에 앨범이 표시됩니다.</string>
+    <string name="deleteQuestion">이 노래를 삭제하시겠습니까?</string>
+    <string name="deleteTitle">삭제</string>
 </resources>
