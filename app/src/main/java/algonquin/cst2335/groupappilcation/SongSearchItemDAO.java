@@ -14,9 +14,10 @@ public interface SongSearchItemDAO {
     @Insert
     long insertSong(SongSearchItem s);
 
-    @Query("Select * from SongSearchItem WHERE name = :name")
-    List<SongSearchItem> getItemByWord(String name);
+//    @Query("Select * from SongSearchItem WHERE name = :name")
+    @Query("Select * from SongSearchItem")
+    List<SongSearchItem> getAllSongs();
 
     @Delete
-    void deleteSong(SongSearchItem s);
+    void deleteSong(SongSearchItem songSearchItem);
 }

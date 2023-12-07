@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="delete">삭제</string>
+    <string name="about">자세히</string>
+    <string name="help">도움</string>
+    <string name="search">검색</string>
+    <string name="enterLatitude">위도를 입력하세요</string>
+    <string name="enterLongitude">경도를 입력하세요.</string>
+    <string name="saveYourFavorite">좋아하는 것을 저장하세요</string>
+    <string name="search_button_text">검색</string>
+    <string name="About">자세히</string>
+    <string name="Help">도움</string>
+    <string name="Title">제목</string>
+    <string name="Duration">지속</string>
+    <string name="Album">앨범명</string>
+    <string name="app_name">GroupAppilcation</string>
+</resources>

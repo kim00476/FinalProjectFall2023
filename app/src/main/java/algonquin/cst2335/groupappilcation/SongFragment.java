@@ -18,6 +18,7 @@ public class SongFragment extends Fragment {
 
     SongSearchItem selected;
     public SongFragment(SongSearchItem song){
+
         selected = song;
     }
     @Override
@@ -26,10 +27,11 @@ public class SongFragment extends Fragment {
 
         SongFragmentBinding binding = SongFragmentBinding.inflate(inflater);
 
-        binding.titleView.setText(selected.title);
-        binding.durationView.setText(selected.duration);
-        binding.albumNameView.setText(selected.name);
-//        binding.albumImage.setImageBitmap(selected.picture_small);  //Question
+//        binding.titleViewId.setText(selected.title);
+//        binding.durationView.setText(selected.duration);
+//        binding.albumNameView.setText(selected.name);
+//        binding.albumImage.setText(selected.picture_small);  //Question
+//        binding.databaseId.setText("Id = " + selected.id)
         return binding.getRoot();
     }
 }

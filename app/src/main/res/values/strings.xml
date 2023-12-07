@@ -1,27 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!--    toolbar strings -->
     <string name="delete">Delete</string>
     <string name="about">About</string>
     <string name="help">Help</string>
     <string name="search">Search</string>
+    <string name="app_name1">GroupAppilcation</string>
+
+    <!--    Main activity strings-->
+    <string name="main_message">Welcome to our app!</string>
+    <string name="main_recipebtn">Recipe Search</string>
+    <string name="main_dictionarybtn">Word Search</string>
+    <string name="main_songbtn">Song Search</string>
+    <string name="main_sunsetbtn">Sunrise Sunset</string>
+    <string name="main_toast_dict">Moving to the Dictionary</string>
+
+    <!--    sunrise sunset strings -->
     <string name="enterLatitude">Enter latitude:</string>
     <string name="enterLongitude">Enter longitude:</string>
+    <string name="how_to_look_up_location1">This application is design for looking up sunset or sunrise time for a specific location.</string>
+    <string name="how_to_look_up_location2">Please enter the latitude and longitude in the corresponding search bar then click "search".</string>
+    <string name="how_to_look_up_location3">You can also save or delete your favorite locations by clicking the corresponding buttons at the bottom and on the top.</string>
+    <string name="how_to_look_up_location4">By tapping an existing record, you will get the current times for date of today.</string>
+
+    <!--    recipe strings -->
     <string name="saveYourFavorite">Save your favorite</string>
-    <string name="app_name">GroupAppilcation</string>
     <string name="recipe_edit_text_hint">Search recipe by name</string>
     <string name="search_button_text">Search</string>
     <string name="view_saved_recipes_button">View Saved Recipes</string>
     <string name="recipe_image_desc">Recipe Image</string>
     <string name="recipe_title_placeholder">Recipe Title Goes Here</string>
-    <string name="first_instruction_text">Welcome to the Dictionary Search page!
-    Here you can type in any word and browse through multiple definitions.</string>
-    <string name="second_instruction_text">After you have searched the word you are thinking about, you can save the word into a list right here!</string>
-    <string name="third_instruction_text">Just click on the definition you want and use the toolbar icons to save or delete the definition from your own list</string>
-    <string name="fourth_instruction_text">Thanks for checking out our Dictionary App!</string>
-    <string name="how_to_look_up_location1">This application is design for looking up sunset or sunrise time for a specific location.</string>
-    <string name="how_to_look_up_location2">Please enter the latitude and longitude in the corresponding search bar then click "search".</string>
-    <string name="how_to_look_up_location3">You can also save or delete your favorite locations by clicking the corresponding buttons at the bottom and on the top.</string>
-    <string name="how_to_look_up_location4">By tapping an existing record, you will get the current times for date of today.</string>
-    <string name="imageButtonDescription">Click to perform a specific action</string>
     <string name="save_button">Save</string>
     <string name="count_saved_recipes">Count Saved Recipes</string>
     <string name="recipe_app_desc">Recipe Search is a user-friendly mobile app that simplifies recipe discovery. Enter a recipe name, and the app, powered by the Spoonacular API, fetches a list of matching recipes. Browse results, view detailed information, save favorites to a local database, and easily access them later. The app also remembers your search term for a seamless experience.</string>
@@ -31,4 +40,45 @@
     <string name="title_placeholder">Title Goes Here</string>
     <string name="delete_button">Delete</string>
     <string name="source_url_placeholder">Source URL Goes Here</string>
+
+    <!--    dictionary strings -->
+    <string name="first_instruction_text">Welcome to the Dictionary Word search!</string>
+    <string name="second_instruction_text">Type any word inside the text area to be able to view definitions.</string>
+    <string name="third_instruction_text">The words are saved to a database, which you can view the word in the toolbar. After opening the selected word you can delete the items!</string>
+    <string name="fourth_instruction_text">Thank you for checking out my Dictionary Search App!</string>
+    <string name="dictionary_about">Dictionary Search app made by Christopher St.Aubin</string>
+    <string name="dictionary_instruction_sb">CLOSE</string>
+    <string name="dictionary_homebtn_alrt">Are you sure you want to go back to home?</string>
+    <string name="dictionary_homebtn_alrt_title">Confirmation</string>
+    <string name="dictionary_homebtn_alrt_cancel">Cancel</string>
+    <string name="dictionary_homebtn_alrt_yes">Yes</string>
+    <string name="dictionary_recpbtn_alrt">Are you sure you want to move to the Recipe Search page?</string>
+    <string name="dictionary_recpbtn_alrt_title">Confirmation</string>
+    <string name="dictionary_recpbtn_alrt_cancel">Cancel</string>
+    <string name="dictionary_recpbtn_alrt_yes">Yes</string>
+    <string name="dictionary_songbtn_alrt">Are you sure you want to move to the Song Search page?</string>
+    <string name="dictionary_songbtn_alrt_title">Confirmation</string>
+    <string name="dictionary_songbtn_alrt_cancel">Cancel</string>
+    <string name="dictionary_songbtn_alrt_yes">Yes</string>
+    <string name="dictionary_sunbtn_alrt">Are you sure you want to move to the Sunrise Sunset page?</string>
+    <string name="dictionary_sunbtn_alrt_title">Confirmation</string>
+    <string name="dictionary_sunbtn_alrt_cancel">Cancel</string>
+    <string name="dictionary_sunbtn_alrt_yes">Yes</string>
+    <string name="dictionary_main_btn">SEARCH</string>
+    <string name="dictionary_main_editText">Type something here</string>
+    <string name="dict_delete_msg">Are you sure you want to delete this definition?</string>
+    <string name="dict_delete_title">Question:</string>
+    <string name="dict_del_neg">No</string>
+    <string name="dict_del_pos">Yes</string>
+    <string name="dict_del_sb">You deleted definition </string>
+    <string name="dict_del_sb_undo">UNDO </string>
+
+    <!--    Song -->
+    <string name="About">About</string>
+    <string name="Help">Help</string>
+    <string name="Title">Title</string>
+    <string name="Duration">Duration</string>
+    <string name="Album">Album Name</string>
+    <string name="app_name">GroupAppilcation</string>
+  
 </resources>
