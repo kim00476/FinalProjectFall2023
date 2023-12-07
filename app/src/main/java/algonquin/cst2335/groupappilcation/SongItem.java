@@ -8,39 +8,39 @@ import androidx.room.PrimaryKey;
 public class SongItem {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    long id;
-
+    public long id;
     @ColumnInfo(name = "artistName")
-    String name;
+    protected String name;
     @ColumnInfo(name = "songTitle")
-    String songTitle;
-    @ColumnInfo(name = "duration")
-    int duration;
+    protected String songTitle;
     @ColumnInfo(name = "albumImage")
-    String albumImage;
+    protected String albumImage;
+    @ColumnInfo(name = "CheckBox")
+    protected boolean isCheckBox;
+    @ColumnInfo(name = "Save")
+    protected boolean isSaveButton;
+    @ColumnInfo(name = "Delete")
+    protected boolean isDeleteButton;
 
-    SongItem(String name, String songTitle, int duration, String albumImage){
-        this.name = name;
+    public SongItem(String songTitle, String albumImage, boolean isCheckBox,
+                    boolean isSaveButton, boolean isDeleteButton) {
         this.songTitle = songTitle;
-        this.duration = duration;
         this.albumImage = albumImage;
+        this.isCheckBox = isCheckBox;
+        this.isSaveButton = isSaveButton;
+        this.isDeleteButton = isDeleteButton;
+        }
+        public String getSongTitle() {
+            return songTitle;
+        }
+        public String getAlbumImage(){
+            return albumImage;
+        }
+        public boolean isCheckBox(){
+            return isCheckBox;
+        }
+        public boolean isSaveButton(){
+            return isSaveButton;
+        }
+        public boolean isDeleteButton() {return isDeleteButton;}
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getSongTitle() {
-        return songTitle;
-    }
-
-    public int getDuration() {
-        return duration;
-    }
-
-    public String getAlbumImage() {
-        return albumImage;
-    }
-
-
-}

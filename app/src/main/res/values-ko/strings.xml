@@ -4,22 +4,14 @@
     <string name="about">자세히</string>
     <string name="help">도움</string>
     <string name="search">검색</string>
-    <string name="enterLatitude">위도를 입력하세요</string>
+    <string name="enterLatitude">" ​ 위도를 입력하세요"</string>
     <string name="enterLongitude">경도를 입력하세요.</string>
     <string name="saveYourFavorite">좋아하는 것을 저장하세요</string>
+    <string name="app_name">그룹애플리케이션</string>
     <string name="search_button_text">검색</string>
     <string name="About">자세히</string>
     <string name="Help">도움</string>
     <string name="Title">제목</string>
     <string name="Duration">지속</string>
     <string name="Album">앨범명</string>
-    <string name="app_name">GroupAppilcation</string>
-    <string name="addQuestion">즐겨 찾기에 추가?</string>
-    <string name="addTitle">즐겨 찾기에 추가</string>
-    <string name="confirm">예</string>
-    <string name="favoritesAdded"> 즐겨찾기에 추가됨</string>
-    <string name="songInFavorties">이미 즐겨찾기에 등록된 노래</string>
-    <string name="albumHere">여기에 앨범이 표시됩니다.</string>
-    <string name="deleteQuestion">이 노래를 삭제하시겠습니까?</string>
-    <string name="deleteTitle">삭제</string>
 </resources>
