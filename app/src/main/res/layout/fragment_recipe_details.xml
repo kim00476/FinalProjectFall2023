@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:text="Title Goes Here"
+            android:text="@string/title_placeholder"
             android:textAlignment="center"
             android:textSize="30sp" />
 
@@ -45,14 +45,14 @@
             android:id="@+id/saveButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Save"
+            android:text="@string/save_button"
             android:visibility="gone" />
 
         <Button
             android:id="@+id/deleteButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Delete"
+            android:text="@string/delete_button"
             android:visibility="gone" />
 
         <TextView
@@ -60,7 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:autoLink="web"
-            android:text="Source URL Goes Here"
+            android:text="@string/source_url_placeholder"
             android:textAlignment="center" />
     </LinearLayout>
 </ScrollView>

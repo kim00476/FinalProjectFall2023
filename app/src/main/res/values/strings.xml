@@ -28,4 +28,7 @@
     <string name="text_count_recipes">"Number of Saved Recipes: "</string>
     <string name="recipe_error_saving">Unfortunately, this recipe is corrupted and cannot be stored in the database</string>
     <string name="recipe_error_display">Unfortunately, this recipe is corrupted and cannot be fully displayed and stored in the database</string>
+    <string name="title_placeholder">Title Goes Here</string>
+    <string name="delete_button">Delete</string>
+    <string name="source_url_placeholder">Source URL Goes Here</string>
 </resources>

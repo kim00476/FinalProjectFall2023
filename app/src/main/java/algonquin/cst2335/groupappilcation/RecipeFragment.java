@@ -91,9 +91,7 @@ public class RecipeFragment extends Fragment {
                                             image.compress(Bitmap.CompressFormat.PNG, 100, fOut);
                                         }
 
-                                        thread.execute(() -> {
-                                            riDAO.insertRecipe(new RecipeItem(id, title, summary, sourceURL, fileName));
-                                        });
+                                        thread.execute(() -> riDAO.insertRecipe(new RecipeItem(id, title, summary, sourceURL, fileName)));
 
                                         requireActivity().runOnUiThread(() -> {
                                             binding.saveButton.setVisibility(View.GONE);
@@ -117,9 +115,7 @@ public class RecipeFragment extends Fragment {
                                         throw new RuntimeException(e);
                                     }
 
-                                    thread.execute(() -> {
-                                        riDAO.insertRecipe(new RecipeItem(id, title, summary, sourceURL, "recipe_placeholder.png"));
-                                    });
+                                    thread.execute(() -> riDAO.insertRecipe(new RecipeItem(id, title, summary, sourceURL, "recipe_placeholder.png")));
 
                                     requireActivity().runOnUiThread(() -> {
                                         binding.saveButton.setVisibility(View.GONE);
@@ -137,22 +133,20 @@ public class RecipeFragment extends Fragment {
                 queue.add(request);
             });
 
-            binding.deleteButton.setOnClickListener(v -> {
-                thread.execute(() -> {
-                    RecipeItem deletedRecipe = riDAO.getRecipeById(selected.getId()).get(0);
-                    File imageFile = new File(requireContext().getFilesDir(), deletedRecipe.image);
+            binding.deleteButton.setOnClickListener(v -> thread.execute(() -> {
+                RecipeItem deletedRecipe = riDAO.getRecipeById(selected.getId()).get(0);
+                File imageFile = new File(requireContext().getFilesDir(), deletedRecipe.image);
 
-                    riDAO.deleteRecipe(deletedRecipe);
-                    imageFile.delete();
+                riDAO.deleteRecipe(deletedRecipe);
+                imageFile.delete();
 
-                    requireActivity().runOnUiThread(() -> {
-                        binding.deleteButton.setVisibility(View.GONE);
-                        binding.saveButton.setVisibility(View.VISIBLE);
+                requireActivity().runOnUiThread(() -> {
+                    binding.deleteButton.setVisibility(View.GONE);
+                    binding.saveButton.setVisibility(View.VISIBLE);
 
-                        mainActivity.myAdapter.notifyDataSetChanged();
-                    });
+                    mainActivity.myAdapter.notifyDataSetChanged();
                 });
-            });
+            }));
 
 
             thread.execute(() -> {
@@ -188,11 +182,9 @@ public class RecipeFragment extends Fragment {
 
                             ImageRequest imgReq = new ImageRequest(
                                     response.getString("image"),
-                                    image -> {
-                                        requireActivity().runOnUiThread(() -> {
-                                            binding.imageView.setImageBitmap(image);
-                                        });
-                                    },
+                                    image -> requireActivity().runOnUiThread(() -> {
+                                        binding.imageView.setImageBitmap(image);
+                                    }),
                                     1024,
                                     1024,
                                     ImageView.ScaleType.CENTER,

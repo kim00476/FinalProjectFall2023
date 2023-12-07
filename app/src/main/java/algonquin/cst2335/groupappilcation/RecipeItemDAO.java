@@ -21,12 +21,6 @@ public interface RecipeItemDAO {
     @Query("SELECT * FROM RecipeItem where id = :id")
     List<RecipeItem> getRecipeById(long id);
 
-    @Query("DELETE FROM RecipeItem WHERE id = :id")
-    void deleteRecipeByID(long id);
-
-    @Query("DELETE FROM RecipeItem")
-    void deleteAllRecipes();
-
     @Delete
     void deleteRecipe(RecipeItem recipeItem);
 }
