@@ -22,5 +22,10 @@
     <string name="how_to_look_up_location3">You can also save or delete your favorite locations by clicking the corresponding buttons at the bottom and on the top.</string>
     <string name="how_to_look_up_location4">By tapping an existing record, you will get the current times for date of today.</string>
     <string name="imageButtonDescription">Click to perform a specific action</string>
-
+    <string name="save_button">Save</string>
+    <string name="count_saved_recipes">Count Saved Recipes</string>
+    <string name="recipe_app_desc">Recipe Search is a user-friendly mobile app that simplifies recipe discovery. Enter a recipe name, and the app, powered by the Spoonacular API, fetches a list of matching recipes. Browse results, view detailed information, save favorites to a local database, and easily access them later. The app also remembers your search term for a seamless experience.</string>
+    <string name="text_count_recipes">"Number of Saved Recipes: "</string>
+    <string name="recipe_error_saving">Unfortunately, this recipe is corrupted and cannot be stored in the database</string>
+    <string name="recipe_error_display">Unfortunately, this recipe is corrupted and cannot be fully displayed and stored in the database</string>
 </resources>

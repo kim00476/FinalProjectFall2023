@@ -2,15 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/action_toast"
-        android:title="Show Toast"/>
+        android:id="@+id/about_item"
+        android:title="@string/help"/>
 
     <item
-        android:id="@+id/action_snackbar"
-        android:title="Show Snackbar"/>
-
-    <item
-        android:id="@+id/action_alert_dialog"
-        android:title="Show Alert Dialog"/>
-
+        android:id="@+id/count_recipes"
+        android:title="@string/count_saved_recipes"/>
 </menu>
