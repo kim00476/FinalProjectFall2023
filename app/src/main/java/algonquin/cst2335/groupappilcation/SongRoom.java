@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,7 +30,7 @@ import algonquin.cst2335.groupappilcation.databinding.ItemSongBinding;
 
 public class SongRoom extends AppCompatActivity {
     private RecyclerView.Adapter myAdapter;
-    ArrayList<SongItem> favoriteSong = new ArrayList<>();
+    ArrayList<SongItem> favoriteSongs = new ArrayList<>();
     Executor thread = Executors.newSingleThreadExecutor();
     SongItemDAO songItemDAO;
     SongViewModel songViewModel;
@@ -48,12 +48,12 @@ public class SongRoom extends AppCompatActivity {
         songItemDAO = db.songItemDAO();
 
         songViewModel = new ViewModelProvider(this).get(SongViewModel.class);
-        favoriteSong = songViewModel.listSong.getValue();
+        favoriteSongs = songViewModel.listSong.getValue();
 
-        if (favoriteSong == null) {
-            songViewModel.favoriteSongsArray.postValue(favoriteSong = new ArrayList<>());
+        if (favoriteSongs == null) {
+            songViewModel.favoriteSongsArray.postValue(favoriteSongs = new ArrayList<>());
             thread.execute(() -> {
-                favoriteSong.addAll(songItemDAO.getAllSongs());
+                favoriteSongs.addAll(songItemDAO.getAllSongs());
                 runOnUiThread(() -> songRoomBinding.recycleView.setAdapter(myAdapter));
             });
         }
@@ -75,16 +75,16 @@ public class SongRoom extends AppCompatActivity {
 
             @Override
             public void onBindViewHolder(@NonNull FavRowHolder holder, int position) {
-                SongItem favoriteSong = favoriteSong.get(position);
-                holder.favoriteSong.setText(favoriteSong.getName());
-                holder.favoriteAlbum.setText(favoriteSong.getSongTitle());
-                String pathname = favoriteSong.getAlbumImage();
+                SongItem favoriteSong1 = favoriteSongs.get(position);
+                holder.favoriteSong.setText(favoriteSong1.getName());
+                holder.favoriteAlbum.setText(favoriteSong1.getSongTitle());
+                String pathname = favoriteSong1.getAlbumImage();
                 Picasso.get().load(new File(pathname)).into(holder.favoriteImage);
             }
 
             @Override
             public int getItemCount() {
-                return favoriteSong.size();
+                return favoriteSongs.size();
             }
 
             @Override
@@ -100,7 +100,7 @@ public class SongRoom extends AppCompatActivity {
         TextView favoriteSong;
         TextView favoriteAlbum;
         ImageView favoriteImage;
-        ImageButton favoriteDeleteBtn;
+        Button favoriteDeleteBtn;
 
         public FavRowHolder(@NonNull View itemView) {
             super(itemView);
@@ -121,27 +121,27 @@ public class SongRoom extends AppCompatActivity {
 
                         })
                         .setPositiveButton(confirm, (dialog, cl) -> {
-                            SongItem song = favoriteSong.get(position);
+                            SongItem song = favoriteSongs.get(position);
 
                             thread.execute(() -> {
-                                SongItemDAO.deleteSong(song);
-                                runOnUiThread(() -> songRoomBinding.favRecyclerView.setAdapter(myAdapter));
+                                songItemDAO.deleteSong(song);
+                                runOnUiThread(() -> songRoomBinding.recycleView.setAdapter(myAdapter));
                             });
-                            favoriteSong.remove(position);
+                            favoriteSongs.remove(position);
                             myAdapter.notifyItemRemoved(position);
 
-                            String deletedSong = getString(R.string.deletedSong);
-                            String undo = getString(R.string.undo);
+                            String deletedSong = "Deleted Song";
+                            String undo = "Undo";
 
                             Snackbar.make(favoriteSong, deletedSong + " " + favoriteSong.getText().toString(),
                                             Snackbar.LENGTH_LONG)
                                     .setAction(undo, click -> {
-                                        favoriteSong.add(position, song);
+                                        favoriteSongs.add(position, song);
                                         myAdapter.notifyItemInserted(position);
                                         thread.execute(() ->
                                         {
-                                            SongItemDAO.insertSong(song);
-                                            runOnUiThread(() -> songRoomBinding.favRecyclerView.setAdapter(myAdapter));
+                                            songItemDAO.insertSong(song);
+                                            runOnUiThread(() -> songRoomBinding.recycleView.setAdapter(myAdapter));
                                         });
                                     })
                                     .show();

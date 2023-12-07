@@ -1,7 +1,5 @@
 package algonquin.cst2335.groupappilcation;
 
-import static android.os.Build.VERSION_CODES.R;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -24,7 +22,6 @@ import androidx.room.Room;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -35,11 +32,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -50,21 +44,20 @@ import algonquin.cst2335.groupappilcation.databinding.SongFragmentBinding;
 import algonquin.cst2335.groupappilcation.databinding.SongListBinding;
 
 public class SongSearchMain extends AppCompatActivity {
+    protected RequestQueue queue = null;
     Button searchBtn;
     EditText search;
     RecyclerView recyclerView;
-    protected RequestQueue queue = null;
-    private ActivitySongSearchMainBinding binding;
-    private SongListBinding songListBinding;
     SongViewModel songModel;
     ArrayList<SongItem> songItems = new ArrayList<>();
-    private RecyclerView.Adapter myAdapter;
     SharedPreferences sharedPreferences;
     Executor thread = Executors.newSingleThreadExecutor();
     String artistName;
     SongItemDAO songItemDAO;
-    SongFragmentBinding mBinding;
     SongFragment songFragment;
+    private ActivitySongSearchMainBinding binding;
+    private SongListBinding songListBinding;
+    private RecyclerView.Adapter myAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +73,7 @@ public class SongSearchMain extends AppCompatActivity {
 
         binding = ActivitySongSearchMainBinding.inflate(getLayoutInflater());
 
-        if(songItems == null){
+        if (songItems == null) {
             songModel.listSong.postValue(songItems = new ArrayList<>());
 //            Executor thread = Executors.newSingleThreadExecutor();
 //            thread.execute(()->
@@ -118,13 +111,13 @@ public class SongSearchMain extends AppCompatActivity {
             @NonNull
             @Override
             public MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                songListBinding = songListBinding.inflate(getLayoutInflater());
+                songListBinding = SongListBinding.inflate(getLayoutInflater());
                 return new MyHolder(songListBinding.getRoot());
             }
 
             @Override
             public void onBindViewHolder(@NonNull MyHolder holder, int position) {
-                runOnUiThread(()-> {
+                runOnUiThread(() -> {
                     SongItem song = songItems.get(position);
                     holder.songName.setText(song.getName());
                     holder.albumName.setText(song.getSongTitle());
@@ -155,8 +148,8 @@ public class SongSearchMain extends AppCompatActivity {
 //                .replace(R.id.toolbar_container, new DeezerToolbarFragment())
 //            .commit();
 
-        searchBtn.setOnClickListener( clk -> {
-            String searchAuthor = getString(R.string.searchArtistName);
+        searchBtn.setOnClickListener(clk -> {
+            String searchAuthor = "Search Author";
             Toast.makeText(SongSearchMain.this, searchAuthor, Toast.LENGTH_SHORT).show();
             String userInput = binding.artistName.getText().toString();
             SharedPreferences.Editor editor = prefs.edit();
@@ -198,6 +191,7 @@ public class SongSearchMain extends AppCompatActivity {
                                                         String name = contributeObj.getString("name");
 //                                          String albumImage = albumData.getJSONObject(j).getString("picture_small");
 
+                                                        SongFragmentBinding mBinding = SongFragmentBinding.inflate(getLayoutInflater());
                                                         String imageUrl = "https://e-cdns-images.dzcdn.net/images/artist/" + album + ".jpg";
                                                         String pathname = getFilesDir() + "/" + album + ".jpg";
                                                         File file = new File(pathname);
@@ -205,18 +199,14 @@ public class SongSearchMain extends AppCompatActivity {
                                                             mBinding.albumImage.setImageBitmap(BitmapFactory.decodeFile(pathname));
                                                         } else {
                                                             ImageRequest imgReq = new ImageRequest(imageUrl,
-                                                                    (Response.Listener<Bitmap>) bitmap -> {
+                                                                    bitmap -> {
                                                                         FileOutputStream fOut = null;
                                                                         try {
                                                                             fOut = openFileOutput(album + ".jpg", Context.MODE_PRIVATE);
                                                                             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
                                                                             fOut.flush();
                                                                             fOut.close();
-                                                                        } catch (
-                                                                                FileNotFoundException e) {
-                                                                            e.printStackTrace();
-                                                                        } catch (
-                                                                                IOException e) {
+                                                                        } catch (IOException e) {
                                                                             throw new RuntimeException(e);
                                                                         }
                                                                         mBinding.albumImage.setImageBitmap(bitmap);
@@ -225,7 +215,7 @@ public class SongSearchMain extends AppCompatActivity {
                                                                     });
                                                             queue.add(imgReq);
                                                         }
-                                                        songItems.add(new SongItem(name, title,duration, album));
+                                                        songItems.add(new SongItem(name, title, duration, album));
                                                     }
                                                 }
                                             } catch (JSONException e) {
@@ -248,9 +238,9 @@ public class SongSearchMain extends AppCompatActivity {
                     }));
             queue.add(request);
         });//click search button listener end
-    };
+    }
 
-//    String artist = binding.artistName.getText().toString();
+    //    String artist = binding.artistName.getText().toString();
 //    String stringUrl = "";
 //
 //    // Handles the artist string with spaces
@@ -313,6 +303,7 @@ public class SongSearchMain extends AppCompatActivity {
         TextView albumName;
         TextView songDuration;
         ImageView albumImage;
+
         public MyHolder(@NonNull View itemView) {
             super(itemView);
             itemView.setOnClickListener(clk -> {

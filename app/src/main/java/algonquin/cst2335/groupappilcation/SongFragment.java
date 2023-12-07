@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.room.Room;
 
 
+import com.squareup.picasso.Picasso;
+
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
