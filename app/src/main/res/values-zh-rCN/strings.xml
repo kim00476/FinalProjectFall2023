@@ -1,16 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!--    toolbar strings -->
     <string name="delete">删除</string>
     <string name="about">关于</string>
     <string name="help">帮助</string>
     <string name="search">搜索</string>
+    <string name="app_name1">群组应用</string>
+
+    <!--    Main activity strings-->
+    <string name="main_message">欢迎来到我们的应用！</string>
+    <string name="main_recipebtn">食谱搜索</string>
+    <string name="main_dictionarybtn">单词搜索</string>
+    <string name="main_songbtn">歌曲搜索</string>
+    <string name="main_sunsetbtn">日出日落</string>
+    <string name="main_toast_dict">转到词典</string>
+
+    <!--    sunrise sunset strings -->
     <string name="enterLatitude">输入纬度：</string>
     <string name="enterLongitude">输入经度：</string>
-    <string name="viewYourFavorite">查看您的收藏</string>
-    <string name="app_name">群组应用</string>
-    <string name="how_to_look_up_location1">此应用程序设计用于查找特定位置的日出或日落时间。</string>
-    <string name="how_to_look_up_location2">请输入纬度和经度，然后单击“搜索”。</string>
-    <string name="how_to_look_up_location3">您还可以通过单击底部和顶部的相应按钮保存或删除您喜欢的位置。</string>
-    <string name="how_to_look_up_location4">通过点击现有记录，您将获取今天日期的当前时间。</string>
-    <string name="imageButtonDescription">单击执行特定操作</string>
+    <string name="how_to_look_up_location1">此应用程序专为查找特定位置的日落或日出时间而设计。</string>
+    <string name="how_to_look_up_location2">请在相应的搜索栏中输入纬度和经度，然后单击“搜索”。</string>
+    <string name="how_to_look_up_location3">您可以保存位置以备将来搜索，也可以通过长按保存的位置进行删除。</string>
+    <string name="how_to_look_up_location4">通过点击现有位置，将执行新的搜索。</string>
+    <string name="save_location">保存位置</string>
+    <string name="latitude">纬度：</string>
+    <string name="longitude">经度：</string>
+    <string name="sunrise">日出时间：</string>
+    <string name="sunset">日落时间：</string>
+    <string name="date">日期：</string>
+
+    <!--    recipe strings -->
+    <string name="saveYourFavorite">保存您喜欢的</string>
+    <string name="recipe_edit_text_hint">按名称搜索食谱</string>
+    <string name="search_button_text">搜索</string>
+    <string name="view_saved_recipes_button">查看保存的食谱</string>
+    <string name="recipe_image_desc">食谱图片</string>
+    <string name="recipe_title_placeholder">食谱标题在这里</string>
+
+    <!--    dictionary strings -->
+    <string name="first_instruction_text">欢迎来到字典单词搜索！</string>
+    <string name="second_instruction_text">在文本区域内键入任何单词以查看定义。</string>
+    <string name="third_instruction_text">单词保存到数据库中，您可以在工具栏中查看单词。打开所选单词后，您可以删除项目！</string>
+    <string name="fourth_instruction_text">感谢您查看我的字典搜索应用程序！</string>
+    <!-- Add more translations for other strings as needed -->
+
 </resources>
