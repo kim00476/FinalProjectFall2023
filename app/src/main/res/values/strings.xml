@@ -31,7 +31,15 @@
     <string name="view_saved_recipes_button">View Saved Recipes</string>
     <string name="recipe_image_desc">Recipe Image</string>
     <string name="recipe_title_placeholder">Recipe Title Goes Here</string>
-
+    <string name="save_button">Save</string>
+    <string name="count_saved_recipes">Count Saved Recipes</string>
+    <string name="recipe_app_desc">Recipe Search is a user-friendly mobile app that simplifies recipe discovery. Enter a recipe name, and the app, powered by the Spoonacular API, fetches a list of matching recipes. Browse results, view detailed information, save favorites to a local database, and easily access them later. The app also remembers your search term for a seamless experience.</string>
+    <string name="text_count_recipes">"Number of Saved Recipes: "</string>
+    <string name="recipe_error_saving">Unfortunately, this recipe is corrupted and cannot be stored in the database</string>
+    <string name="recipe_error_display">Unfortunately, this recipe is corrupted and cannot be fully displayed and stored in the database</string>
+    <string name="title_placeholder">Title Goes Here</string>
+    <string name="delete_button">Delete</string>
+    <string name="source_url_placeholder">Source URL Goes Here</string>
 
     <!--    dictionary strings -->
     <string name="first_instruction_text">Welcome to the Dictionary Word search!</string>
@@ -65,12 +73,12 @@
     <string name="dict_del_sb">You deleted definition </string>
     <string name="dict_del_sb_undo">UNDO </string>
 
-<!--Song-->
+    <!--    Song -->
     <string name="About">About</string>
     <string name="Help">Help</string>
     <string name="Title">Title</string>
     <string name="Duration">Duration</string>
     <string name="Album">Album Name</string>
     <string name="app_name">GroupAppilcation</string>
-
+  
 </resources>
