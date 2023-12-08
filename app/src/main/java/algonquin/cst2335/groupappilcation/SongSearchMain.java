@@ -34,9 +34,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -193,12 +190,12 @@ public class SongSearchMain extends AppCompatActivity {
                                                        // String imageUrl = "https://e-cdns-images.dzcdn.net/images/artist/" + album + ".jpg";
                                                         String pathname = getFilesDir() + "/" + album + ".jpg";
                                                         File file = new File(pathname);
-                                                       if (file.exists()) {
+                                                      /* if (file.exists()) {
 //                                                            mBinding.albumImage.setImageBitmap(BitmapFactory.decodeFile(pathname));
-                                                        } else {
+                                                        } else {*/
                                                             ImageRequest imgReq = new ImageRequest(album,
                                                                     (Response.Listener<Bitmap>) bitmap -> {
-                                                                        FileOutputStream fOut = null;
+                                                                   /*     FileOutputStream fOut = null;
                                                                         try {
                                                                             fOut = openFileOutput(album + ".jpg", Context.MODE_PRIVATE);
                                                                             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
@@ -211,17 +208,20 @@ public class SongSearchMain extends AppCompatActivity {
                                                                                 IOException e) {
                                                                             throw new RuntimeException(e);
                                                                         }
-                                                                        mBinding.albumImage.setImageBitmap(bitmap);
+                                                                        mBinding.albumImage.setImageBitmap(bitmap);*/
                                                                     }, 200, 200, ImageView.ScaleType.CENTER, null,
                                                                     (error) -> {
                                                                     });
-                                                            queue.add(imgReq);
-                                                        }
+
+                                                        queue.add(imgReq);
                                                         songItems.add(new SongItem(name, title,duration, album));
                                                     }
                                                 }
 
 
+                                                runOnUiThread(() -> {
+                                                    myAdapter.notifyDataSetChanged();
+                                                });
                                             } catch (JSONException e) {
                                                 int k = 0;
                                                 throw new RuntimeException(e);
@@ -234,9 +234,6 @@ public class SongSearchMain extends AppCompatActivity {
 
                             }
 
-                            runOnUiThread(() -> {
-                                myAdapter.notifyDataSetChanged();
-                            });
                         } catch (JSONException e) {
                             String m  = e.getMessage();
                             Log.d("Hi", m);
@@ -324,10 +321,10 @@ public class SongSearchMain extends AppCompatActivity {
                 songModel.selectedSong.postValue(selectedSong);
             });
             // binds using the id.
-            songName = itemView.findViewById(R.id.songList);
-//            albumName = itemView.findViewById(R.id.albumName);
-//            songDuration = itemView.findViewById(R.id.songDuration);
-            albumImage = itemView.findViewById(R.id.itemAlbumImage);
+            songName = itemView.findViewById(R.id.titleView);
+            albumName = itemView.findViewById(R.id.albumNameView);
+            songDuration = itemView.findViewById(R.id.durationView);
+            albumImage = itemView.findViewById(R.id.albumImage);
 
 
         }
