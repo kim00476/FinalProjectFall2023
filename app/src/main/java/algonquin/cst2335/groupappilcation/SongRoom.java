@@ -1,5 +1,6 @@
 package algonquin.cst2335.groupappilcation;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,104 +9,145 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import com.google.android.material.snackbar.Snackbar;
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import algonquin.cst2335.groupappilcation.Data.SongSearchModel;
+import algonquin.cst2335.groupappilcation.Data.SongViewModel;
 import algonquin.cst2335.groupappilcation.databinding.ActivitySongRoomBinding;
 import algonquin.cst2335.groupappilcation.databinding.ItemSongBinding;
 
 public class SongRoom extends AppCompatActivity {
-    ArrayList<SongSearchItem> songLists; // in the beginning, there are no messages
-    ActivitySongRoomBinding binding;
-    RecyclerView.Adapter<MyRowHolder> myAdapter;
-    SongSearchModel songModel;
-    SongSearchItemDAO mDao; //Declare the dao here
+    private RecyclerView.Adapter myAdapter;
+    ArrayList<SongItem> favoriteSongs = new ArrayList<>();
+    Executor thread = Executors.newSingleThreadExecutor();
+    SongItemDAO songItemDAO;
+    SongViewModel songViewModel;
+    ActivitySongRoomBinding songRoomBinding;
+    RecyclerView favRecyclerView;
+    ItemSongBinding itemSongBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivitySongRoomBinding.inflate(getLayoutInflater());
+        Intent fromPrevious = getIntent();
 
-        songModel = new ViewModelProvider(this).get(SongSearchModel.class);
-        songLists = songModel.songLists.getValue();
+        SongDatabase db = Room.databaseBuilder(getApplicationContext(), SongDatabase.class, "songs").build();
+        songItemDAO = db.songItemDAO();
 
-        SongDatabase db = Room.databaseBuilder(getApplicationContext(), SongDatabase.class, "database-name").build();
+        songViewModel = new ViewModelProvider(this).get(SongViewModel.class);
+        favoriteSongs = songViewModel.listSong.getValue();
 
-        mDao = db.songDAO();
-
-        if(songLists == null){
-            songModel.songLists.postValue(songLists = new ArrayList<>());
-
-            Executor thread2 = Executors.newSingleThreadExecutor();
-            thread2.execute(() ->
-            {
-                songLists.addAll( mDao.getAllSongs() ); //Once you get the data from database
-
-                runOnUiThread( () ->  binding.recycleView.setAdapter( myAdapter )); //You can then load the RecyclerView
+        if (favoriteSongs == null) {
+            songViewModel.favoriteSongsArray.postValue(favoriteSongs = new ArrayList<>());
+            thread.execute(() -> {
+                favoriteSongs.addAll(songItemDAO.getAllSongs());
+                runOnUiThread(() -> songRoomBinding.recycleView.setAdapter(myAdapter));
             });
         }
 
-        setContentView(binding.getRoot());
+        songRoomBinding = ActivitySongRoomBinding.inflate(getLayoutInflater());
+        View favoritesView = songRoomBinding.getRoot();
 
-        binding.deleteBtn.setOnClickListener(click ->{
-
-            myAdapter.notifyDataSetChanged();
-        });
-
-        binding.recycleView.setAdapter(
-                myAdapter = new RecyclerView.Adapter<MyRowHolder>() {
-                    @Override
-                    public int getItemViewType(int position){
-                        //determine which layout to load at row position
-
-                        SongSearchItem songList = songLists.get(position);
-                        return songList.isRemoveButton() ? 0 :1;
-                    }
+        favRecyclerView = songRoomBinding.recycleView;
+        //
+        favRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // Adapter for Recycle view
+        favRecyclerView.setAdapter(myAdapter = new RecyclerView.Adapter<SongRoom.FavRowHolder>() {
             @NonNull
             @Override
-            public MyRowHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                ItemSongBinding binding = ItemSongBinding.inflate(getLayoutInflater());
-                return new MyRowHolder(binding.getRoot());
+            public SongRoom.FavRowHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                itemSongBinding = ItemSongBinding.inflate(getLayoutInflater());
+                return new SongRoom.FavRowHolder(itemSongBinding.getRoot());
             }
 
             @Override
-            public void onBindViewHolder(@NonNull MyRowHolder holder, int position) {
-                SongSearchItem songList = songLists.get(position);
-
-                holder.titleView.setText(songList.getTitle());
-                holder.durationView.setText(songList.getDuration());
-                holder.albumNameView.setText(songList.getPicture_small());
-
+            public void onBindViewHolder(@NonNull FavRowHolder holder, int position) {
+                SongItem favoriteSong = favoriteSongs.get(position);
+                holder.favoriteSong.setText(favoriteSong.getName());
+                holder.favoriteAlbum.setText(favoriteSong.getSongTitle());
+                String pathname = favoriteSong.getAlbumImage();
+                Picasso.get().load(new File(pathname)).into(holder.favoriteImage);
             }
 
             @Override
             public int getItemCount() {
-                return songLists.size();
+                return favoriteSongs.size();
+            }
+
+            @Override
+            public int getItemViewType(int position) {
+                return 0;
             }
         });
-
+        setContentView(favoritesView);
     }
 
-    class MyRowHolder extends RecyclerView.ViewHolder {
-        ImageView albumImage;
-        TextView titleView, durationView, albumNameView;
-        Button removeButton;
-        public MyRowHolder(@NonNull View itemView) {
+    class FavRowHolder extends RecyclerView.ViewHolder {
+        // Sets views from the favorite_songs.xml, to maintain variables.
+        TextView favoriteSong;
+        TextView favoriteAlbum;
+        ImageView favoriteImage;
+        Button favoriteDeleteBtn;
+
+        public FavRowHolder(@NonNull View itemView) {
             super(itemView);
+            favoriteSong = itemView.findViewById(R.id.favoriteSong);
+//            favoriteAlbum = itemView.findViewById(R.id.favoriteAlbum);
+            favoriteImage = itemView.findViewById(R.id.favoriteImage);
+            favoriteDeleteBtn = itemView.findViewById(R.id.favoriteDeleteBtn);
 
-            albumImage = itemView.findViewById(R.id.albumImage);
-            titleView = itemView.findViewById(R.id.titleView);
-            durationView = itemView.findViewById(R.id.durationView);
-            albumNameView = itemView.findViewById(R.id.albumNameView);
-            removeButton = itemView.findViewById(R.id.removeButton);
-        }
+            favoriteDeleteBtn.setOnClickListener(clk -> {
+                int position = getAdapterPosition();
+                AlertDialog.Builder builder = new AlertDialog.Builder(SongRoom.this);
+                String deleteQuestion = getString(R.string.deleteQuestion);
+                String deleteTitle = getString(R.string.deleteTitle);
+                String confirm = getString(R.string.confirm);
+                builder.setMessage(deleteQuestion)
+                        .setTitle(deleteTitle).
+                        setNegativeButton("No", (dialog, cl) -> {
+
+                        })
+                        .setPositiveButton(confirm, (dialog, cl) -> {
+                            SongItem song = favoriteSongs.get(position);
+
+                            thread.execute(() -> {
+                                songItemDAO.deleteSong(song);
+                                runOnUiThread(() -> favRecyclerView.setAdapter(myAdapter));
+                            });
+                            favoriteSongs.remove(position);
+                            myAdapter.notifyItemRemoved(position);
+
+                            String deletedSong = getString(R.string.deletedSong);
+                            String undo = getString(R.string.undo);
+
+                            Snackbar.make(favoriteSong, deletedSong + " " + favoriteSong.getText().toString(),
+                                            Snackbar.LENGTH_LONG)
+                                    .setAction(undo, click -> {
+                                        favoriteSongs.add(position, song);
+                                        myAdapter.notifyItemInserted(position);
+                                        thread.execute(() ->
+                                        {
+                                            songItemDAO.insertSong(song);
+                                            runOnUiThread(() -> favRecyclerView.setAdapter(myAdapter));
+                                        });
+                                    })
+                                    .show();
+                        })
+                        .create().show();
+            });
+        } //SongRoom end
     }
-}//class
+}
